@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JPND Bank | Admin Panel</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="theme-light">
+    <div class="app-shell">
+      <header class="app-header app-header-auth">
+        <div class="logo">
+          <span class="logo-mark">JD</span>
+          <span class="logo-text">JPND Bank – Admin</span>
+        </div>
+        <nav class="header-nav">
+          <span id="adminWelcome" class="chip">Admin</span>
+          <button id="adminLogoutBtn" class="btn btn-ghost btn-sm">
+            Logout
+          </button>
+        </nav>
+      </header>
+
+      <main class="dashboard-main">
+        <section class="grid grid-3">
+          <article class="card highlight">
+            <h2 class="card-title">Bank Summary</h2>
+            <p class="muted">Total Accounts</p>
+            <p id="totalAccounts" class="text-xl"></p>
+            <p class="muted mt-sm">Total Customer Balance</p>
+            <p id="totalBalance" class="balance-amount"></p>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Create Account</h2>
+            <form id="adminCreateForm" class="form">
+              <div class="form-group">
+                <label for="adminName">Full Name</label>
+                <input type="text" id="adminName" required />
+              </div>
+              <div class="form-group">
+                <label for="adminEmail">Email</label>
+                <input type="email" id="adminEmail" required />
+              </div>
+              <div class="form-group">
+                <label for="adminPhone">Phone</label>
+                <input type="tel" id="adminPhone" required />
+              </div>
+              <div class="form-group">
+                <label for="adminGender">Gender</label>
+                <select id="adminGender" required>
+                  <option value="">Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                  <option value="Prefer not to say">Prefer not to say</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="adminOpenAccount">Open an account</label>
+                <select id="adminOpenAccount" required>
+                  <option value="">Select account type</option>
+                  <option value="savings">Savings</option>
+                  <option value="salary">Salary</option>
+                  <option value="od-account">OD account</option>
+                  <option value="nri-account">NRI account</option>
+                  <option value="business-account">Business account</option>
+                  <option value="joint-account">Joint account</option>
+                  <option value="rural-account">Rural account</option>
+                  <option value="nps">National Pension System</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="adminDob">Date of birth</label>
+                <input
+                  type="text"
+                  id="adminDob"
+                  placeholder="DD/MM/YYYY"
+                  maxlength="10"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="adminAddress">Address</label>
+                <input
+                  type="text"
+                  id="adminAddress"
+                  placeholder="Street, city, PIN"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="adminInitialDeposit">Initial Deposit (₹)</label>
+                <input
+                  type="text"
+                  id="adminInitialDeposit"
+                  min="0"
+                  step="100"
+                  value="1000"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="adminPassword">Password</label>
+                <div class="password-input-wrapper">
+                  <input
+                    type="password"
+                    id="adminPassword"
+                    minlength="6"
+                    required
+                  />
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    id="adminPasswordToggle"
+                    aria-label="Toggle password visibility"
+                  >
+                    <span class="eye-icon">👁</span>
+                  </button>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                  Create
+                </button>
+                <button
+                  type="button"
+                  id="adminCreateResetBtn"
+                  class="btn btn-ghost"
+                >
+                  Reset
+                </button>
+              </div>
+            </form>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Hints</h2>
+            <ul class="hint-list">
+              <li>Click on an account row to edit user details.</li>
+              <li>Use the trash icon to permanently close an account.</li>
+            </ul>
+          </article>
+        </section>
+
+        <section class="card mt-lg">
+          <div class="card-header">
+            <h2 class="card-title">All Customer Accounts</h2>
+          </div>
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Account #</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Balance</th>
+                <th>Last Txn / Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminUsersBody">
+              <tr>
+                <td colspan="7" class="muted text-center">
+                  No accounts yet.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="card mt-lg">
+          <div class="card-header">
+            <h2 class="card-title">AI Product Catalog</h2>
+          </div>
+          <form id="adminProductForm" class="form two-column">
+            <input type="hidden" id="adminProductId" />
+            <div class="form-group">
+              <label for="adminProductName">Product Name</label>
+              <input type="text" id="adminProductName" required />
+            </div>
+            <div class="form-group">
+              <label for="adminProductCategory">Category</label>
+              <select id="adminProductCategory" required>
+                <option value="insurance">Insurance</option>
+                <option value="investment">Investment</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="adminProductRisk">Risk Level</label>
+              <select id="adminProductRisk" required>
+                <option value="low">Low</option>
+                <option value="moderate" selected>Moderate</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="adminProductMinBalance">Min Balance (₹)</label>
+              <input type="number" id="adminProductMinBalance" min="0" step="1" required />
+            </div>
+            <div class="form-group">
+              <label for="adminProductMinAge">Min Age</label>
+              <input type="number" id="adminProductMinAge" min="18" max="100" required />
+            </div>
+            <div class="form-group">
+              <label for="adminProductMaxAge">Max Age</label>
+              <input type="number" id="adminProductMaxAge" min="18" max="100" required />
+            </div>
+            <div class="form-group">
+              <label for="adminProductActive">Status</label>
+              <select id="adminProductActive" required>
+                <option value="true" selected>Active</option>
+                <option value="false">Inactive</option>
+              </select>
+            </div>
+            <div class="form-group form-full">
+              <label for="adminProductSummary">Summary</label>
+              <input type="text" id="adminProductSummary" required />
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Save Product</button>
+              <button type="button" id="adminProductResetBtn" class="btn btn-ghost">Reset</button>
+            </div>
+          </form>
+          <table class="table mt-md">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Risk</th>
+                <th>Age Range</th>
+                <th>Min Balance</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminProductsBody">
+              <tr><td colspan="7" class="muted text-center">No products yet.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="card mt-lg">
+          <div class="card-header">
+            <h2 class="card-title">AI Recommendation Feedback Analytics</h2>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Interested</th>
+                <th>Saved</th>
+                <th>Not Relevant</th>
+              </tr>
+            </thead>
+            <tbody id="adminAiFeedbackBody">
+              <tr><td colspan="5" class="muted text-center">No feedback yet.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="card mt-lg">
+          <div class="card-header">
+            <h2 class="card-title">AI Model Diagnostics</h2>
+          </div>
+          <div class="grid grid-4 mt-sm">
+            <article class="card">
+              <p class="muted">Avg Conversion</p>
+              <p id="adminKpiAvgConversion" class="text-xl">0.00%</p>
+            </article>
+            <article class="card">
+              <p class="muted">Most Improved</p>
+              <p id="adminKpiMostImproved" class="text-xl">-</p>
+            </article>
+            <article class="card">
+              <p class="muted">Most Declining</p>
+              <p id="adminKpiMostDeclining" class="text-xl">-</p>
+            </article>
+            <article class="card">
+              <p class="muted">Total Feedback</p>
+              <p id="adminKpiTotalFeedback" class="text-xl">0</p>
+            </article>
+          </div>
+          <form id="adminDiagnosticsFilterForm" class="form two-column">
+            <div class="form-group">
+              <label for="adminDiagDays">Date Range</label>
+              <select id="adminDiagDays">
+                <option value="7" selected>Last 7 days</option>
+                <option value="15">Last 15 days</option>
+                <option value="30">Last 30 days</option>
+                <option value="60">Last 60 days</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="adminDiagCategory">Category</label>
+              <select id="adminDiagCategory">
+                <option value="all" selected>All</option>
+                <option value="insurance">Insurance</option>
+                <option value="investment">Investment</option>
+              </select>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Apply Filters</button>
+              <button type="button" id="adminExportDiagnosticsBtn" class="btn btn-ghost">
+                Export Diagnostics CSV
+              </button>
+              <button type="button" id="adminExportTrendBtn" class="btn btn-ghost">
+                Export Trend CSV
+              </button>
+              <button type="button" id="adminExportCombinedBtn" class="btn btn-ghost">
+                Export Combined CSV
+              </button>
+            </div>
+          </form>
+          <div class="grid grid-2">
+            <article class="card">
+              <h3 class="card-title">Top Boosted Products</h3>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Adjustment</th>
+                    <th>Conversion %</th>
+                    <th>Mini Trend (A/S/R)</th>
+                  </tr>
+                </thead>
+                <tbody id="adminTopBoostedBody">
+                  <tr><td colspan="5" class="muted text-center">No data yet.</td></tr>
+                </tbody>
+              </table>
+            </article>
+            <article class="card">
+              <h3 class="card-title">Top Penalized Products</h3>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Adjustment</th>
+                    <th>Conversion %</th>
+                    <th>Mini Trend (A/S/R)</th>
+                  </tr>
+                </thead>
+                <tbody id="adminTopPenalizedBody">
+                  <tr><td colspan="5" class="muted text-center">No data yet.</td></tr>
+                </tbody>
+              </table>
+            </article>
+          </div>
+          <h3 class="card-title mt-md">Feedback Trend (Last 7 Days)</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Interested</th>
+                <th>Saved</th>
+                <th>Not Relevant</th>
+              </tr>
+            </thead>
+            <tbody id="adminFeedbackTrendBody">
+              <tr><td colspan="4" class="muted text-center">No trend data yet.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="adminEditModal" class="modal hidden">
+          <div class="modal-backdrop"></div>
+          <div class="modal-content">
+            <h2>Edit User</h2>
+            <form id="adminEditForm" class="form">
+              <input type="hidden" id="adminEditAccountNumber" />
+              <div class="form-group">
+                <label for="adminEditName">Full Name</label>
+                <input type="text" id="adminEditName" required />
+              </div>
+              <div class="form-group">
+                <label for="adminEditEmail">Email</label>
+                <input type="email" id="adminEditEmail" required />
+              </div>
+              <div class="form-group">
+                <label for="adminEditPhone">Phone</label>
+                <input type="tel" id="adminEditPhone" required />
+              </div>
+              <div class="form-group">
+                <label for="adminEditPassword">New Password (optional)</label>
+                <div class="password-input-wrapper">
+                  <input
+                    type="password"
+                    id="adminEditPassword"
+                    placeholder="Leave blank to keep existing"
+                  />
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    id="adminEditPasswordToggle"
+                    aria-label="Toggle password visibility"
+                  >
+                    <span class="eye-icon">👁</span>
+                  </button>
+                </div>
+              </div>
+              <div id="adminEditError" class="alert alert-error hidden"></div>
+              <div class="modal-actions">
+                <button type="button" class="btn btn-ghost" data-close-modal>
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <section class="card mt-lg">
+        <div class="card-header">
+          <h2 class="card-title">Fraud Alerts (Phase-2 ML)</h2>
+        </div>
+        <div class="muted" id="adminFraudModelStatus">Loading fraud model status...</div>
+        <div class="muted" id="adminFraudRealtimeModelStatus">Loading realtime fraud model status...</div>
+        <div class="mt-sm button-stack horizontal">
+          <button type="button" id="adminTrainFraudModelBtn" class="btn btn-primary btn-sm">
+            Train Fraud Model
+          </button>
+          <button type="button" id="adminTrainFraudRealtimeModelBtn" class="btn btn-ghost btn-sm">
+            Train Realtime Fraud Model
+          </button>
+        </div>
+        <div class="grid grid-4 mt-sm">
+          <article class="card">
+            <p class="muted">Total Alerts</p>
+            <p id="adminFraudTotal" class="text-xl">0</p>
+          </article>
+          <article class="card">
+            <p class="muted">Open Alerts</p>
+            <p id="adminFraudOpen" class="text-xl">0</p>
+          </article>
+          <article class="card">
+            <p class="muted">High Risk</p>
+            <p id="adminFraudHigh" class="text-xl">0</p>
+          </article>
+          <article class="card">
+            <p class="muted">Blocked</p>
+            <p id="adminFraudBlocked" class="text-xl">0</p>
+          </article>
+        </div>
+        <div class="form-group" style="max-width: 260px">
+          <label for="adminFraudAccountFilter">Account Number</label>
+          <input type="text" id="adminFraudAccountFilter" placeholder="Optional account filter" />
+        </div>
+        <div class="form-group" style="max-width: 260px">
+          <label for="adminFraudStatusFilter">Filter by Status</label>
+          <select id="adminFraudStatusFilter">
+            <option value="all" selected>All</option>
+            <option value="open">Open</option>
+            <option value="reviewed">Reviewed</option>
+            <option value="blocked">Blocked</option>
+          </select>
+        </div>
+        <table class="table mt-sm">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Account</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Risk (Final / Phase-1)</th>
+              <th>Reasons</th>
+              <th>Status</th>
+              <th>Actual Label</th>
+              <th>Created</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="adminFraudAlertsBody">
+            <tr><td colspan="10" class="muted text-center">No fraud alerts yet.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="card-title mt-md">Mule / Beneficiary Network Risk (Real-time Graph)</h3>
+        <div class="mt-sm button-stack horizontal">
+          <button type="button" id="adminRefreshFraudNetworkBtn" class="btn btn-ghost btn-sm">
+            Refresh Network Risk
+          </button>
+        </div>
+        <table class="table mt-sm">
+          <thead>
+            <tr>
+              <th>Account</th>
+              <th>Name</th>
+              <th>Fan-In (30d)</th>
+              <th>Fan-Out (30d)</th>
+              <th>Receiver Fan-In</th>
+              <th>Mule Risk</th>
+              <th>Reasons</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="adminFraudNetworkBody">
+            <tr><td colspan="8" class="muted text-center">No network-risk signals yet.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="card-title mt-md">AML / Network Risk (Graph ML)</h3>
+        <div class="muted" id="adminAmlModelStatus">Loading AML graph model status...</div>
+        <div class="mt-sm button-stack horizontal">
+          <button type="button" id="adminTrainAmlModelBtn" class="btn btn-primary btn-sm">
+            Train AML Graph Model
+          </button>
+          <button type="button" id="adminRefreshAmlRingsBtn" class="btn btn-ghost btn-sm">
+            Refresh Suspicious Rings
+          </button>
+          <button type="button" id="adminRunAmlAutomationBtn" class="btn btn-ghost btn-sm">
+            Run AML Automation
+          </button>
+        </div>
+        <table class="table mt-sm">
+          <thead>
+            <tr>
+              <th>Ring ID</th>
+              <th>Risk</th>
+              <th>Accounts</th>
+              <th>Beneficiaries</th>
+              <th>Devices</th>
+              <th>IPs</th>
+              <th>Linked Accounts</th>
+              <th>Reasons</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="adminAmlRingsBody">
+            <tr><td colspan="9" class="muted text-center">No suspicious rings detected yet.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="card-title mt-md">AML Case Queue (Phase-1.5)</h3>
+        <div class="mt-sm button-stack horizontal">
+          <button type="button" id="adminRefreshAmlCasesBtn" class="btn btn-ghost btn-sm">
+            Refresh AML Cases
+          </button>
+        </div>
+        <div class="grid grid-3 mt-sm">
+          <div class="form-group">
+            <label for="adminAmlCaseStatusFilter">Case Status</label>
+            <select id="adminAmlCaseStatusFilter">
+              <option value="all" selected>All</option>
+              <option value="open">open</option>
+              <option value="investigating">investigating</option>
+              <option value="escalated">escalated</option>
+              <option value="closed">closed</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="adminAmlCasePriorityFilter">Priority</label>
+            <select id="adminAmlCasePriorityFilter">
+              <option value="all" selected>All</option>
+              <option value="critical">critical</option>
+              <option value="high">high</option>
+              <option value="medium">medium</option>
+              <option value="low">low</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="adminAmlWatchlistOnly">Watchlist Only</label>
+            <select id="adminAmlWatchlistOnly">
+              <option value="false" selected>No</option>
+              <option value="true">Yes</option>
+            </select>
+          </div>
+        </div>
+        <table class="table mt-sm">
+          <thead>
+            <tr>
+              <th>Case ID</th>
+              <th>Ring ID</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Watchlist</th>
+              <th>Risk</th>
+              <th>Assignee</th>
+              <th>Accounts</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="adminAmlCasesBody">
+            <tr><td colspan="9" class="muted text-center">No AML cases yet.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="card-title mt-md">Case Alert Linkage (Phase-2)</h3>
+        <div class="mt-sm button-stack horizontal">
+          <button type="button" id="adminRefreshAmlAlertLinksBtn" class="btn btn-ghost btn-sm">
+            Refresh Case Alert Links
+          </button>
+        </div>
+        <table class="table mt-sm">
+          <thead>
+            <tr>
+              <th>Case ID</th>
+              <th>Ring ID</th>
+              <th>Linked Alerts</th>
+              <th>High Risk Alerts</th>
+              <th>Blocked Alerts</th>
+              <th>Latest Alert</th>
+            </tr>
+          </thead>
+          <tbody id="adminAmlAlertLinksBody">
+            <tr><td colspan="6" class="muted text-center">No linkage data yet.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card mt-lg">
+        <div class="card-header">
+          <h2 class="card-title">Loan Sanction Training (Phase-2)</h2>
+        </div>
+        <div class="muted" id="adminLoanModelStatus">Loading model status...</div>
+        <div class="muted" id="adminLoanScorecardModelStatus">Loading scorecard status...</div>
+        <div class="mt-sm button-stack horizontal">
+          <button
+            type="button"
+            id="adminTrainLoanSanctionModelBtn"
+            class="btn btn-primary btn-sm"
+          >
+            Train Loan Model
+          </button>
+          <button
+            type="button"
+            id="adminTrainLoanScorecardModelBtn"
+            class="btn btn-ghost btn-sm"
+          >
+            Train Credit Scorecard
+          </button>
+          <button
+            type="button"
+            id="adminRefreshLoanAppsBtn"
+            class="btn btn-ghost btn-sm"
+          >
+            Refresh Applications
+          </button>
+        </div>
+
+        <table class="table mt-md">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Account</th>
+              <th>Loan Type</th>
+              <th>Amount</th>
+              <th>DTI</th>
+              <th>Pred</th>
+              <th>Actual Label</th>
+              <th>Explain</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="adminLoanAppsBody">
+            <tr><td colspan="9" class="muted text-center">No labeled data yet.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card mt-lg">
+        <div class="card-header">
+          <h2 class="card-title">Credit Risk Early-Warning</h2>
+        </div>
+        <div class="muted" id="adminCreditRiskModelStatus">Loading credit risk model status...</div>
+        <div class="mt-sm button-stack horizontal">
+          <button type="button" id="adminTrainCreditRiskModelBtn" class="btn btn-primary btn-sm">
+            Train Credit Risk Model
+          </button>
+          <button type="button" id="adminRefreshCreditRiskSnapshotsBtn" class="btn btn-ghost btn-sm">
+            Refresh Snapshots
+          </button>
+        </div>
+        <div class="mt-sm button-stack horizontal">
+          <button type="button" id="adminRefreshCreditRiskBtn" class="btn btn-ghost btn-sm">
+            Refresh High-Risk Accounts
+          </button>
+        </div>
+        <table class="table mt-md">
+          <thead>
+            <tr>
+              <th>Account</th>
+              <th>Name</th>
+              <th>Balance</th>
+              <th>Risk</th>
+              <th>Reasons</th>
+              <th>Period End</th>
+            </tr>
+          </thead>
+          <tbody id="adminCreditRiskBody">
+            <tr><td colspan="6" class="muted text-center">No data yet.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="card-title mt-md">Label Snapshots (for Phase-2 Training)</h3>
+        <table class="table mt-sm">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Account</th>
+              <th>Risk (Final/Phase-1)</th>
+              <th>Actual Label</th>
+              <th>Period End</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="adminCreditRiskSnapshotsBody">
+            <tr><td colspan="6" class="muted text-center">No snapshots yet.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card mt-lg">
+        <div class="card-header">
+          <h2 class="card-title">Churn / Retention Prediction</h2>
+        </div>
+        <div class="muted" id="adminChurnModelStatus">Loading churn model status...</div>
+        <div class="muted" id="adminChurnNbaModelStatus">Loading Next-Best-Action model status...</div>
+        <div class="mt-sm button-stack horizontal">
+          <button type="button" id="adminTrainChurnModelBtn" class="btn btn-primary btn-sm">
+            Train Churn Model
+          </button>
+          <button type="button" id="adminTrainChurnNbaModelBtn" class="btn btn-ghost btn-sm">
+            Train Churn NBA Model
+          </button>
+          <button type="button" id="adminRefreshChurnSnapshotsBtn" class="btn btn-ghost btn-sm">
+            Refresh Snapshots
+          </button>
+        </div>
+        <div class="mt-sm button-stack horizontal">
+          <button type="button" id="adminRefreshChurnBtn" class="btn btn-ghost btn-sm">
+            Refresh High Churn Risk
+          </button>
+          <button type="button" id="adminRefreshChurnNbaPerfBtn" class="btn btn-ghost btn-sm">
+            Refresh NBA Offer Performance
+          </button>
+        </div>
+        <div id="adminChurnNbaPerfChart" class="mt-sm muted">Loading offer performance...</div>
+        <table class="table mt-sm">
+          <thead>
+            <tr>
+              <th>Offer</th>
+              <th>Avg Uplift</th>
+              <th>Recommended Users</th>
+              <th>High Risk Users</th>
+              <th>Medium Risk Users</th>
+            </tr>
+          </thead>
+          <tbody id="adminChurnNbaPerfBody">
+            <tr><td colspan="5" class="muted text-center">No offer performance yet.</td></tr>
+          </tbody>
+        </table>
+        <table class="table mt-md">
+          <thead>
+            <tr>
+              <th>Account</th>
+              <th>Name</th>
+              <th>Balance</th>
+              <th>Risk</th>
+              <th>Last Active</th>
+              <th>Reasons</th>
+              <th>Next Best Action</th>
+            </tr>
+          </thead>
+          <tbody id="adminChurnBody">
+            <tr><td colspan="7" class="muted text-center">No data yet.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="card-title mt-md">Label Snapshots (for Phase-2 Training)</h3>
+        <table class="table mt-sm">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Account</th>
+              <th>Risk (Final/Phase-1)</th>
+              <th>Actual Label</th>
+              <th>Created</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="adminChurnSnapshotsBody">
+            <tr><td colspan="6" class="muted text-center">No snapshots yet.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card mt-lg">
+        <div class="card-header">
+          <h2 class="card-title">AI Knowledge Base (RAG)</h2>
+        </div>
+        <p class="muted">
+          Add FAQs/policy notes here so the AI Financial Assistant answers using your own content.
+        </p>
+        <form id="adminKbForm" class="form">
+          <input type="hidden" id="adminKbId" />
+          <div class="form-group">
+            <label for="adminKbTitle">Title</label>
+            <input type="text" id="adminKbTitle" placeholder="e.g., Home Loan Eligibility Rules" />
+          </div>
+          <div class="form-group">
+            <label for="adminKbTags">Tags (comma-separated)</label>
+            <input
+              type="text"
+              id="adminKbTags"
+              placeholder="loan, eligibility, documentation, interest rate"
+            />
+          </div>
+          <div class="form-group form-full">
+            <label for="adminKbContent">Content</label>
+            <textarea
+              id="adminKbContent"
+              rows="6"
+              placeholder="Write clear FAQ-style notes. The assistant will retrieve the most relevant snippets."
+              required
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="adminKbActive">Status</label>
+            <select id="adminKbActive" required>
+              <option value="true" selected>Active</option>
+              <option value="false">Inactive</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save KB Document</button>
+            <button type="button" id="adminKbResetBtn" class="btn btn-ghost">Reset</button>
+            <button type="button" id="adminKbRefreshBtn" class="btn btn-ghost">Refresh</button>
+          </div>
+        </form>
+        <table class="table mt-md">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Tags</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminKbBody">
+            <tr><td colspan="6" class="muted text-center">No KB documents yet.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card mt-lg">
+        <div class="card-header">
+          <h2 class="card-title">KYC (Face + ID) Submissions</h2>
+        </div>
+        <p class="muted">
+          Review OCR + face-match results. Approve manual-review or rejected cases after offline checks.
+        </p>
+        <div class="button-stack horizontal mt-sm">
+          <div class="form-group" style="margin: 0;">
+            <label for="adminKycStatusFilter">Status</label>
+            <select id="adminKycStatusFilter">
+              <option value="">All</option>
+              <option value="approved">approved</option>
+              <option value="manual_review">manual_review</option>
+              <option value="rejected">rejected</option>
+            </select>
+          </div>
+          <button type="button" id="adminKycRefreshBtn" class="btn btn-ghost btn-sm">Refresh</button>
+        </div>
+        <table class="table mt-md">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Account</th>
+              <th>Name</th>
+              <th>Status</th>
+              <th>Liveness</th>
+              <th>Face Δ</th>
+              <th>Name match</th>
+              <th>Time</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="adminKycBody">
+            <tr><td colspan="9" class="muted text-center">No submissions yet.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card mt-lg">
+        <div class="card-header">
+          <h2 class="card-title">Loan Document AI Review (Phase-1.5)</h2>
+        </div>
+        <div id="adminLoanDocModelStatus" class="muted">Loading document AI model status...</div>
+        <div class="button-stack horizontal mt-sm">
+          <button type="button" id="adminLoanDocTrainBtn" class="btn btn-primary btn-sm">Train Document AI Model</button>
+        </div>
+        <p class="muted">Review OCR extraction outputs and correct document type/income fields when needed.</p>
+        <div class="form two-column">
+          <div class="form-group">
+            <label for="adminLoanDocReviewStatusFilter">Review Status</label>
+            <select id="adminLoanDocReviewStatusFilter">
+              <option value="">All</option>
+              <option value="pending">pending</option>
+              <option value="approved">approved</option>
+              <option value="needs_correction">needs_correction</option>
+              <option value="rejected">rejected</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="adminLoanDocAccountFilter">Account Number</label>
+            <input type="text" id="adminLoanDocAccountFilter" placeholder="Optional account number" />
+          </div>
+          <div class="form-actions">
+            <button type="button" id="adminLoanDocRefreshBtn" class="btn btn-ghost">Refresh</button>
+          </div>
+        </div>
+        <table class="table mt-md">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Account</th>
+              <th>File</th>
+              <th>Doc Type</th>
+              <th>Income</th>
+              <th>EMI</th>
+              <th>Review</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="adminLoanDocAiBody">
+            <tr><td colspan="8" class="muted text-center">No document AI logs yet.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card mt-lg">
+        <div class="card-header">
+          <h2 class="card-title">Voice Banking Audit Logs</h2>
+        </div>
+        <div class="form two-column">
+          <div class="form-group">
+            <label for="adminVoiceAccountFilter">Account Number</label>
+            <input type="text" id="adminVoiceAccountFilter" placeholder="Optional account number" />
+          </div>
+          <div class="form-group">
+            <label for="adminVoiceIntentFilter">Intent</label>
+            <select id="adminVoiceIntentFilter">
+              <option value="">All</option>
+              <option value="check_balance">check_balance</option>
+              <option value="transfer">transfer</option>
+              <option value="card_block">card_block</option>
+              <option value="card_unblock">card_unblock</option>
+              <option value="unknown">unknown</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="adminVoiceStatusFilter">Status</label>
+            <select id="adminVoiceStatusFilter">
+              <option value="">All</option>
+              <option value="requested">requested</option>
+              <option value="verified">verified</option>
+              <option value="executed">executed</option>
+              <option value="failed">failed</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="button" id="adminVoiceRefreshBtn" class="btn btn-ghost">Refresh Logs</button>
+          </div>
+        </div>
+        <table class="table mt-md">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Account</th>
+              <th>Intent</th>
+              <th>Status</th>
+              <th>Step-up</th>
+              <th>Confidence</th>
+              <th>Transcript</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="adminVoiceAuditBody">
+            <tr><td colspan="8" class="muted text-center">No logs yet.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card mt-lg">
+        <div class="card-header">
+          <h2 class="card-title">Customer Support Auto-Reply Audit</h2>
+        </div>
+        <div class="grid grid-3 mt-sm">
+          <article class="card">
+            <p class="muted">Total Chats</p>
+            <p id="adminSupportTotal" class="text-xl">0</p>
+          </article>
+          <article class="card">
+            <p class="muted">Blocked (Privacy)</p>
+            <p id="adminSupportBlocked" class="text-xl">0</p>
+          </article>
+          <article class="card">
+            <p class="muted">Safe Responses</p>
+            <p id="adminSupportSafe" class="text-xl">0</p>
+          </article>
+        </div>
+        <div class="grid grid-2 mt-sm">
+          <div class="form-group">
+            <label for="adminSupportAccountFilter">Account Number</label>
+            <input type="text" id="adminSupportAccountFilter" placeholder="Optional account filter" />
+          </div>
+          <div class="form-group">
+            <label for="adminSupportBlockedOnly">Blocked Only</label>
+            <select id="adminSupportBlockedOnly">
+              <option value="false" selected>No</option>
+              <option value="true">Yes</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-2 mt-sm">
+          <div class="form-group">
+            <label for="adminSupportFromDate">From Date</label>
+            <input type="date" id="adminSupportFromDate" />
+          </div>
+          <div class="form-group">
+            <label for="adminSupportToDate">To Date</label>
+            <input type="date" id="adminSupportToDate" />
+          </div>
+        </div>
+        <div class="mt-sm button-stack horizontal">
+          <button type="button" id="adminSupportRefreshBtn" class="btn btn-ghost btn-sm">
+            Refresh Support Logs
+          </button>
+          <button type="button" id="adminSupportExportCsvBtn" class="btn btn-primary btn-sm">
+            Export CSV
+          </button>
+        </div>
+        <table class="table mt-sm">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Account</th>
+              <th>Blocked</th>
+              <th>Sources</th>
+              <th>User Message</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody id="adminSupportChatsBody">
+            <tr><td colspan="6" class="muted text-center">No support chats yet.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="card-title mt-md">Top Blocked Intents (Compliance)</h3>
+        <div id="adminSupportBlockedIntentChart" class="mt-sm">
+          <p class="muted">No blocked intent data yet.</p>
+        </div>
+      </section>
+
+      <footer class="app-footer">
+        <div class="footer-grid">
+          <div>
+            <p class="muted">Contact</p>
+            <p class="footer-line">Email: sample@gmail.com</p>
+            <p class="footer-line">Email: sample1@gmail.com</p>
+            <p class="footer-line">Phone: 9123456789 / 8123456789</p>
+          </div>
+          <div>
+            <p class="muted">Address</p>
+            <p class="footer-line">
+              No:007 randy garden rocky Street,
+            </p>
+            <p class="footer-line">
+              royalnagar Chennai-123456.
+            </p>
+          </div>
+          <div>
+            <p class="muted">Connect</p>
+            <p class="footer-line">
+              <a href="#" target="_blank">Facebook</a> ·
+              <a href="#" target="_blank">Instagram</a> ·
+              <a href="#" target="_blank">WhatsApp</a>
+            </p>
+            <p class="footer-line">
+              <a href="#" target="_blank">View location on map</a>
+            </p>
+          </div>
+        </div>
+        <p class="footer-copy">
+          © <span id="year"></span> JPND Bank. All rights reserved.
+        </p>
+      </footer>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/storage.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/admin.js"></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+  </html>
+
+
+
+

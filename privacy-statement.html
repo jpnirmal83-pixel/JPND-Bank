@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JPND Bank | Privacy statement</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="theme-light">
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="logo">
+          <span class="logo-mark">JD</span>
+          <span class="logo-text">JPND Bank</span>
+        </div>
+        <nav class="header-nav">
+          <a href="register.html" class="link-light">Back to registration</a>
+        </nav>
+      </header>
+
+      <main class="auth-main">
+        <section class="auth-card wide legal-doc">
+          <h1 class="auth-title">Privacy statement</h1>
+          <p class="muted">Last updated: <span id="legalYear"></span></p>
+          <div class="legal-doc-body">
+            <p>
+              JPND Bank is committed to protecting your privacy. This statement explains what
+              personal information we may collect when you register for digital banking, how we use
+              it, and how we safeguard it.
+            </p>
+            <p>
+              We may collect identifiers you provide (such as name, contact details, and address),
+              authentication data, and information needed to meet legal and regulatory requirements.
+              We use this information to operate your account, prevent fraud, and improve our
+              services.
+            </p>
+            <p>
+              We do not sell your personal data. We may share information with regulators or service
+              providers only where permitted by law and under appropriate safeguards.
+            </p>
+            <p>
+              For questions about this privacy statement, contact us using the details in the site
+              footer on the home page.
+            </p>
+          </div>
+          <p class="mt-md">
+            <a href="register.html" class="link-inline">← Return to registration</a>
+          </p>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <p class="footer-copy">© <span id="year"></span> JPND Bank. All rights reserved.</p>
+      </footer>
+    </div>
+    <script>
+      const y = new Date().getFullYear();
+      document.getElementById("year").textContent = y;
+      document.getElementById("legalYear").textContent = y;
+    </script>
+  </body>
+</html>

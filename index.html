@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JPND Bank | Login</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="theme-light">
+    <div class="app-shell">
+      <header class="app-header app-header-auth">
+        <div class="logo">
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23002366;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23003d99;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='20' cy='20' r='18' fill='url(%23grad)'/%3E%3Ctext x='20' y='26' font-family='Arial, sans-serif' font-size='18' font-weight='bold' fill='white' text-anchor='middle'%3EJD%3C/text%3E%3C/svg%3E" alt="JPND Bank Logo" class="logo-img" />
+          <span class="logo-text">JPND Bank</span>
+        </div>
+        <nav class="header-nav">
+          <div class="dropdown">
+            <a href="#" class="link-light dropdown-toggle">Accounts</a>
+            <div class="dropdown-menu">
+              <a href="register.html?mode=open" class="dropdown-item">Savings</a>
+              <a href="register.html?mode=open" class="dropdown-item">Salary</a>
+              <a href="register.html?mode=open" class="dropdown-item">OD account</a>
+              <a href="register.html?mode=open" class="dropdown-item">NRI account</a>
+              <a href="register.html?mode=open" class="dropdown-item">Business account</a>
+              <a href="register.html?mode=open" class="dropdown-item">Joint account</a>
+              <a href="register.html?mode=open" class="dropdown-item">Rural account</a>
+              <a href="register.html?mode=open" class="dropdown-item">National Pension System</a>
+            </div>
+          </div>
+          <div class="dropdown">
+            <a href="#" class="link-light dropdown-toggle">Investments</a>
+            <div class="dropdown-menu">
+              <p class="dropdown-intro">
+                Grow wealth with curated funds, tax-saving instruments, and
+                long-term plans—aligned to your risk profile and goals.
+              </p>
+              <a href="#" class="dropdown-item">Mutual Funds</a>
+              <a href="#" class="dropdown-item">Fixed Deposits</a>
+              <a href="#" class="dropdown-item">Recurring Deposits</a>
+              <a href="#" class="dropdown-item">Public Provident Fund (PPF)</a>
+              <a href="#" class="dropdown-item">National Pension System (NPS)</a>
+              <a href="#" class="dropdown-item">Equity Linked Savings Scheme (ELSS)</a>
+              <a href="#" class="dropdown-item">Sukanya Samriddhi Yojana</a>
+              <a href="#" class="dropdown-item">Senior Citizens Savings Scheme</a>
+            </div>
+          </div>
+          <div class="dropdown">
+            <a href="#" class="link-light dropdown-toggle">Deposits</a>
+            <div class="dropdown-menu">
+              <p class="dropdown-intro">
+                Park your money safely—from everyday savings to fixed and
+                recurring deposits—with competitive rates and flexible tenures.
+              </p>
+              <a href="#" class="dropdown-item">Savings Account</a>
+              <a href="#" class="dropdown-item">Fixed Deposit (FD)</a>
+              <a href="#" class="dropdown-item">Recurring Deposit (RD)</a>
+              <a href="#" class="dropdown-item">Current Account</a>
+              <a href="#" class="dropdown-item">Term Deposit</a>
+              <a href="#" class="dropdown-item">Tax Saving Fixed Deposit</a>
+              <a href="#" class="dropdown-item">Senior Citizens Deposit</a>
+              <a href="#" class="dropdown-item">Flexi Deposit</a>
+            </div>
+          </div>
+          <div class="dropdown">
+            <a href="#" class="link-light dropdown-toggle">Loans</a>
+            <div class="dropdown-menu">
+              <p class="dropdown-intro">
+                Finance your home, education, vehicle, or business with
+                transparent pricing, quick processing, and manageable EMIs.
+              </p>
+              <a href="#" class="dropdown-item">Home Loan</a>
+              <a href="#" class="dropdown-item">Car Loan</a>
+              <a href="#" class="dropdown-item">Education Loan</a>
+              <a href="#" class="dropdown-item">Personal Loan</a>
+              <a href="#" class="dropdown-item">Gold Loan</a>
+              <a href="#" class="dropdown-item">Business Loan</a>
+              <a href="#" class="dropdown-item">Loan Against Property</a>
+              <a href="#" class="dropdown-item">Two-Wheeler Loan</a>
+            </div>
+          </div>
+          <div class="dropdown">
+            <a href="#" class="link-light dropdown-toggle">Cards</a>
+            <div class="dropdown-menu">
+              <p class="dropdown-intro">
+                Choose debit, credit, or prepaid cards with rewards, travel
+                perks, and secure transactions online and at POS.
+              </p>
+              <a href="#" class="dropdown-item">Credit Cards - Rewards & Cashback</a>
+              <a href="#" class="dropdown-item">Debit Cards - Zero Annual Fee</a>
+              <a href="#" class="dropdown-item">Prepaid Cards - Secure & Convenient</a>
+              <a href="#" class="dropdown-item">Travel Cards - Multi-currency</a>
+              <a href="#" class="dropdown-item">Corporate Cards - Business Solutions</a>
+              <a href="#" class="dropdown-item">Premium Cards - Exclusive Benefits</a>
+            </div>
+          </div>
+          <div class="dropdown">
+            <a href="#" class="link-light dropdown-toggle">Services</a>
+            <div class="dropdown-menu">
+              <p class="dropdown-intro">
+                Digital banking essentials: transfers, bill pay, statements,
+                cheque services, and more—available when you need them.
+              </p>
+              <a href="#" class="dropdown-item">Net Banking</a>
+              <a href="#" class="dropdown-item">Mobile Banking</a>
+              <a href="#" class="dropdown-item">NEFT/RTGS/IMPS Transfer</a>
+              <a href="#" class="dropdown-item">Bill Payment Services</a>
+              <a href="#" class="dropdown-item">Demand Draft</a>
+              <a href="#" class="dropdown-item">Cheque Book Request</a>
+              <a href="#" class="dropdown-item">Account Statement</a>
+              <a href="#" class="dropdown-item">Locker Services</a>
+            </div>
+          </div>
+          <div class="dropdown">
+            <a href="#" class="link-light dropdown-toggle">About us</a>
+            <div class="dropdown-menu">
+              <p class="dropdown-intro">
+                Learn who we are—our story, purpose, values, and commitment to
+                trustworthy banking for individuals and businesses.
+              </p>
+              <a href="#" class="dropdown-item">Our Story</a>
+              <a href="#" class="dropdown-item">Company Summary</a>
+              <a href="#" class="dropdown-item">Our Vision</a>
+              <a href="#" class="dropdown-item">Our Mission</a>
+              <a href="#" class="dropdown-item">Core Values</a>
+            </div>
+          </div>
+          <a href="login.html?role=admin" class="btn btn-primary btn-sm">Admin</a>
+          <a href="login.html" class="btn btn-primary btn-sm">Apply online</a>
+        </nav>
+      </header>
+
+      <main class="home-main">
+        <!-- Hero Section -->
+        <section class="home-hero-section">
+          <div class="home-hero-content">
+            <h1 class="home-hero-title">Welcome to JPND Bank</h1>
+            <p class="home-hero-subtitle">Modern, secure digital banking for your everyday life.</p>
+            
+            <div class="home-hero-grid">
+              <div class="home-hero-text">
+                <h2>Banking made simple</h2>
+                <p>Open accounts, manage investments, track deposits, and apply for loans from a single, intuitive dashboard.</p>
+                <ul>
+                  <li>✔ 24x7 secure net banking</li>
+                  <li>✔ Instant fund transfers within bank</li>
+                  <li>✔ Detailed statements and download options</li>
+                </ul>
+                <button class="btn btn-primary" onclick="window.location.href='login.html'">
+                  Login to Net Banking
+                </button>
+              </div>
+              <div class="home-hero-visual">
+                <a href="dashboard.html" onclick="handleProductClick(event)" class="card mini-card mini-card-link">
+                  <p class="muted"><strong>Home loan offers</strong></p>
+                  <p class="footer-line">Low interest rates for your dream home.</p>
+                </a>
+                <a href="dashboard.html" onclick="handleProductClick(event)" class="card mini-card mini-card-link">
+                  <p class="muted"><strong>Education loan offers</strong></p>
+                  <p class="footer-line">Invest in your future with flexible repayment options.</p>
+                </a>
+                <a href="dashboard.html" onclick="handleProductClick(event)" class="card mini-card mini-card-link">
+                  <p class="muted"><strong>Fixed deposits</strong></p>
+                  <p class="footer-line">Attractive interest on long-term savings.</p>
+                </a>
+                <a href="dashboard.html" onclick="handleProductClick(event)" class="card mini-card mini-card-link">
+                  <p class="muted"><strong>Car loans</strong></p>
+                  <p class="footer-line">Upgrade your drive with low EMIs.</p>
+                </a>
+                <a href="dashboard.html" onclick="handleProductClick(event)" class="card mini-card mini-card-link">
+                  <p class="muted"><strong>Gold loans</strong></p>
+                  <p class="footer-line">Quick funds with low interest rates.</p>
+                </a>
+                <a href="dashboard.html" onclick="handleProductClick(event)" class="card mini-card mini-card-link">
+                  <p class="muted"><strong>Personal loan offers</strong></p>
+                  <p class="footer-line">Flexible repayment options for your needs.</p>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Horizontal scroll: banking products -->
+        <section class="home-scroll-section" aria-labelledby="home-products-scroll-title">
+          <div class="home-scroll-heading">
+            <h2 id="home-products-scroll-title" class="section-title">
+              Banking products
+            </h2>
+            <p class="home-scroll-lead">
+              Scroll horizontally to review accounts, cards, loans, and
+              investment options in one place.
+            </p>
+          </div>
+          <div class="home-scroll-row" tabindex="0">
+            <a href="register.html?mode=open" class="home-scroll-card">
+              <span class="home-scroll-card-title">Savings &amp; salary</span>
+              <span class="home-scroll-card-text"
+                >Daily banking with interest on balances and salary credit.</span
+              >
+            </a>
+            <a href="login.html" class="home-scroll-card">
+              <span class="home-scroll-card-title">Credit cards</span>
+              <span class="home-scroll-card-text"
+                >Rewards, cashback, and easy EMI conversions.</span
+              >
+            </a>
+            <a href="login.html" class="home-scroll-card">
+              <span class="home-scroll-card-title">Home loans</span>
+              <span class="home-scroll-card-text"
+                >Competitive rates and flexible tenure for your home.</span
+              >
+            </a>
+            <a href="login.html" class="home-scroll-card">
+              <span class="home-scroll-card-title">Personal loans</span>
+              <span class="home-scroll-card-text"
+                >Quick funds for medical, travel, or consolidation needs.</span
+              >
+            </a>
+            <a href="login.html" class="home-scroll-card">
+              <span class="home-scroll-card-title">FD &amp; RD</span>
+              <span class="home-scroll-card-text"
+                >Lock in rates with fixed or recurring deposits.</span
+              >
+            </a>
+            <a href="login.html" class="home-scroll-card">
+              <span class="home-scroll-card-title">Mutual funds</span>
+              <span class="home-scroll-card-text"
+                >Goal-based SIPs and diversified portfolios.</span
+              >
+            </a>
+            <a href="login.html" class="home-scroll-card">
+              <span class="home-scroll-card-title">Gold loan</span>
+              <span class="home-scroll-card-text"
+                >Liquidity against gold with minimal documentation.</span
+              >
+            </a>
+            <a href="login.html" class="home-scroll-card">
+              <span class="home-scroll-card-title">Business banking</span>
+              <span class="home-scroll-card-text"
+                >Current accounts, OD, and working capital support.</span
+              >
+            </a>
+          </div>
+        </section>
+
+        <!-- Horizontal scroll: current offers -->
+        <section class="home-scroll-section home-offers-strip" aria-labelledby="home-offers-scroll-title">
+          <div class="home-scroll-heading">
+            <h2 id="home-offers-scroll-title" class="section-title">
+              Current offers
+            </h2>
+            <p class="home-scroll-lead">
+              Limited-time promotions on loans, cards, and deposits—login or
+              register to apply.
+            </p>
+          </div>
+          <div class="home-scroll-row" tabindex="0">
+            <a href="login.html" class="home-scroll-card home-scroll-card-offer">
+              <span class="home-scroll-badge">Limited</span>
+              <span class="home-scroll-card-title">Home loan from 8.25% p.a.</span>
+              <span class="home-scroll-card-text"
+                >Processing fee waiver for salaried applicants this quarter.</span
+              >
+            </a>
+            <a href="login.html" class="home-scroll-card home-scroll-card-offer">
+              <span class="home-scroll-badge">Cashback</span>
+              <span class="home-scroll-card-title">Credit card milestone rewards</span>
+              <span class="home-scroll-card-text"
+                >Extra cashback on fuel, dining, and online spends.</span
+              >
+            </a>
+            <a href="login.html" class="home-scroll-card home-scroll-card-offer">
+              <span class="home-scroll-badge">FD booster</span>
+              <span class="home-scroll-card-title">+0.35% on senior FDs</span>
+              <span class="home-scroll-card-text"
+                >Preferential rates for deposits above ₹5 lakhs.</span
+              >
+            </a>
+            <a href="login.html" class="home-scroll-card home-scroll-card-offer">
+              <span class="home-scroll-badge">Education</span>
+              <span class="home-scroll-card-title">Study loan moratorium</span>
+              <span class="home-scroll-card-text"
+                >Grace period options while you complete your course.</span
+              >
+            </a>
+            <a href="login.html" class="home-scroll-card home-scroll-card-offer">
+              <span class="home-scroll-badge">Digital</span>
+              <span class="home-scroll-card-title">Zero-charge NEFT / IMPS</span>
+              <span class="home-scroll-card-text"
+                >On mobile and net banking for retail customers.</span
+              >
+            </a>
+            <a href="register.html?mode=open" class="home-scroll-card home-scroll-card-offer">
+              <span class="home-scroll-badge">New</span>
+              <span class="home-scroll-card-title">Account opening bonus</span>
+              <span class="home-scroll-card-text"
+                >Rewards on first salary credit for select packs.</span
+              >
+            </a>
+          </div>
+        </section>
+
+        <!-- Bank Images Carousel Section -->
+        <section class="carousel-section">
+          <h2 class="section-title">Trusted Banking Partners</h2>
+          <div class="carousel-container">
+            <button class="carousel-btn carousel-btn-prev" aria-label="Previous slide">‹</button>
+            <div class="carousel-wrapper">
+              <div class="carousel-track">
+                <div class="carousel-slide">
+                  <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=300&fit=crop" alt="SBI Bank - Modern Banking Solutions" />
+                  <div class="carousel-caption">
+                    <h3>State Bank of India</h3>
+                    <p>India's largest bank with extensive network</p>
+                  </div>
+                </div>
+                <div class="carousel-slide">
+                  <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=300&fit=crop" alt="ICICI Bank - Digital Banking Excellence" />
+                  <div class="carousel-caption">
+                    <h3>ICICI Bank</h3>
+                    <p>Leading private sector bank with digital innovation</p>
+                  </div>
+                </div>
+                <div class="carousel-slide">
+                  <img src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=800&h=300&fit=crop" alt="HDFC Bank - Customer First Approach" />
+                  <div class="carousel-caption">
+                    <h3>HDFC Bank</h3>
+                    <p>Premier banking services and customer satisfaction</p>
+                  </div>
+                </div>
+                <div class="carousel-slide">
+                  <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=300&fit=crop" alt="Banking Technology" />
+                  <div class="carousel-caption">
+                    <h3>Modern Banking</h3>
+                    <p>Advanced technology for seamless banking experience</p>
+                  </div>
+                </div>
+                <div class="carousel-slide">
+                  <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=300&fit=crop" alt="Secure Banking" />
+                  <div class="carousel-caption">
+                    <h3>Secure Banking</h3>
+                    <p>Your money is safe with us</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="carousel-btn carousel-btn-next" aria-label="Next slide">›</button>
+          </div>
+          <div class="carousel-dots">
+            <button class="carousel-dot active" data-slide="0" aria-label="Slide 1"></button>
+            <button class="carousel-dot" data-slide="1" aria-label="Slide 2"></button>
+            <button class="carousel-dot" data-slide="2" aria-label="Slide 3"></button>
+            <button class="carousel-dot" data-slide="3" aria-label="Slide 4"></button>
+            <button class="carousel-dot" data-slide="4" aria-label="Slide 5"></button>
+          </div>
+        </section>
+
+        <!-- Banking Products Images Section -->
+        <section class="products-section">
+          <h2 class="section-title">Our Banking Products</h2>
+          <div class="products-grid">
+            <div class="product-card">
+              <a href="login.html" class="product-card-image-link" aria-label="Sign in or register to explore Savings Account">
+                <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=400&h=250&fit=crop" alt="Savings Account" />
+              </a>
+              <div class="product-info">
+                <h3>Savings Account</h3>
+                <p>Secure your future with high-interest savings accounts</p>
+              </div>
+            </div>
+            <div class="product-card">
+              <a href="login.html" class="product-card-image-link" aria-label="Sign in or register to explore Credit Cards">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop" alt="Credit Cards" />
+              </a>
+              <div class="product-info">
+                <h3>Credit Cards</h3>
+                <p>Rewards, cashback, and exclusive benefits</p>
+              </div>
+            </div>
+            <div class="product-card">
+              <a href="login.html" class="product-card-image-link" aria-label="Sign in or register to explore Investment Plans">
+                <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=250&fit=crop" alt="Investment Plans" />
+              </a>
+              <div class="product-info">
+                <h3>Investment Plans</h3>
+                <p>Grow your wealth with smart investment options</p>
+              </div>
+            </div>
+            <div class="product-card">
+              <a href="login.html" class="product-card-image-link" aria-label="Sign in or register to explore Loan Services">
+                <img src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=400&h=250&fit=crop" alt="Loan Services" />
+              </a>
+              <div class="product-info">
+                <h3>Loan Services</h3>
+                <p>Home, car, education, and personal loans</p>
+              </div>
+            </div>
+            <div class="product-card">
+              <a href="login.html" class="product-card-image-link" aria-label="Sign in or register to explore Fixed Deposits">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=250&fit=crop" alt="Fixed Deposits" />
+              </a>
+              <div class="product-info">
+                <h3>Fixed Deposits</h3>
+                <p>Safe and guaranteed returns on your deposits</p>
+              </div>
+            </div>
+            <div class="product-card">
+              <a href="login.html" class="product-card-image-link" aria-label="Sign in or register to explore Digital Banking">
+                <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=250&fit=crop" alt="Digital Banking" />
+              </a>
+              <div class="product-info">
+                <h3>Digital Banking</h3>
+                <p>Bank anytime, anywhere with our mobile app</p>
+              </div>
+            </div>
+            <div class="product-card">
+              <a href="login.html" class="product-card-image-link" aria-label="Sign in or register to explore Insurance">
+                <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400&h=250&fit=crop" alt="Insurance" />
+              </a>
+              <div class="product-info">
+                <h3>Insurance</h3>
+                <p>Life, health, and general insurance coverage</p>
+              </div>
+            </div>
+            <div class="product-card">
+              <a href="login.html" class="product-card-image-link" aria-label="Sign in or register to explore Car Loans">
+                <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400&h=250&fit=crop" alt="Car Loans" />
+              </a>
+              <div class="product-info">
+                <h3>Car Loans</h3>
+                <p>Drive your dream car with flexible EMI options</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <div class="footer-grid">
+          <div>
+            <p class="muted">Contact</p>
+            <p class="footer-line">Email: sample@gmail.com</p>
+            <p class="footer-line">Email: sample1@gmail.com</p>
+            <p class="footer-line">Phone: 9123456789 / 8123456789</p>
+          </div>
+          <div>
+            <p class="muted">Address</p>
+            <p class="footer-line">
+              No:007 randy garden rocky Street,
+            </p>
+            <p class="footer-line">
+              royalnagar Chennai-123456.
+            </p>
+          </div>
+          <div>
+            <p class="muted">Connect</p>
+            <p class="footer-line">
+              <a href="#" target="_blank">Facebook</a> ·
+              <a href="#" target="_blank">Instagram</a> ·
+              <a href="#" target="_blank">WhatsApp</a>
+            </p>
+            <p class="footer-line">
+              <a href="#" target="_blank">View location on map</a>
+            </p>
+            <p class="footer-line footer-links">
+              <a href="#" target="_blank">Terms and Conditions</a> ·
+              <a href="#" target="_blank">Subsidiaries</a> ·
+              <a href="#" target="_blank">Corporate governance</a> ·
+              <a href="#" target="_blank">Careers</a> ·
+              <a href="#" target="_blank">Disclaimer</a> ·
+              <a href="#" target="_blank">Feedback</a> ·
+              <a href="#" target="_blank">Useful links</a>
+            </p>
+          </div>
+        </div>
+        <p class="footer-copy">
+          © <span id="year"></span> JPND Bank. All rights reserved.
+        </p>
+      </footer>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/storage.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+      
+      // Handle product card clicks - navigate to dashboard or login
+      function handleProductClick(event) {
+        event.preventDefault();
+        // Check if user is logged in
+        const session = localStorage.getItem('jaydee_bank_session');
+        if (session) {
+          try {
+            const sessionData = JSON.parse(session);
+            if (sessionData && sessionData.accountNumber) {
+              window.location.href = 'dashboard.html';
+              return;
+            }
+          } catch (e) {
+            console.error('Error parsing session', e);
+          }
+        }
+        // If not logged in, redirect to login
+        window.location.href = 'login.html';
+      }
+      
+      // Handle account type selection from dropdown
+      document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+          const accountType = this.textContent.trim();
+          const accountTypeMap = {
+            'Savings': 'savings',
+            'Salary': 'salary',
+            'OD account': 'od-account',
+            'NRI account': 'nri-account',
+            'Business account': 'business-account',
+            'Joint account': 'joint-account',
+            'Rural account': 'rural-account',
+            'National Pension System': 'nps'
+          };
+          
+          const accountValue = accountTypeMap[accountType] || accountType.toLowerCase().replace(/\s+/g, '-');
+          const url = this.getAttribute('href');
+          if (url) {
+            e.preventDefault();
+            window.location.href = url + (url.includes('?') ? '&' : '?') + 'accountType=' + encodeURIComponent(accountValue);
+          }
+        });
+      });
+
+      // Carousel functionality
+      (function() {
+        const track = document.querySelector('.carousel-track');
+        const slides = document.querySelectorAll('.carousel-slide');
+        const prevBtn = document.querySelector('.carousel-btn-prev');
+        const nextBtn = document.querySelector('.carousel-btn-next');
+        const dots = document.querySelectorAll('.carousel-dot');
+        
+        if (!track || !slides.length) return;
+        
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        function updateCarousel() {
+          track.style.transform = `translateX(-${currentSlide * 100}%)`;
+          
+          // Update dots
+          dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentSlide);
+          });
+        }
+
+        function nextSlide() {
+          currentSlide = (currentSlide + 1) % totalSlides;
+          updateCarousel();
+        }
+
+        function prevSlide() {
+          currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+          updateCarousel();
+        }
+
+        function goToSlide(index) {
+          currentSlide = index;
+          updateCarousel();
+        }
+
+        // Button events
+        if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+        if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+
+        // Dot events
+        dots.forEach((dot, index) => {
+          dot.addEventListener('click', () => goToSlide(index));
+        });
+
+        // Auto-play carousel
+        let autoPlayInterval = setInterval(nextSlide, 5000);
+
+        // Pause on hover
+        const carouselContainer = document.querySelector('.carousel-container');
+        if (carouselContainer) {
+          carouselContainer.addEventListener('mouseenter', () => {
+            clearInterval(autoPlayInterval);
+          });
+          carouselContainer.addEventListener('mouseleave', () => {
+            autoPlayInterval = setInterval(nextSlide, 5000);
+          });
+        }
+      })();
+    </script>
+  </body>
+  </html>
+
+
+

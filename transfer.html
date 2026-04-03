@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JPND Bank | Transfer Money</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="theme-light">
+    <div class="app-shell">
+      <header class="app-header app-header-auth">
+        <div class="logo">
+          <span class="logo-mark">JD</span>
+          <span class="logo-text">JPND Bank</span>
+        </div>
+        <nav class="header-nav">
+          <button
+            class="btn btn-ghost btn-sm"
+            onclick="window.location.href='dashboard.html'"
+          >
+            Back to Dashboard
+          </button>
+          <button
+            class="btn btn-ghost btn-sm"
+            onclick="clearSession(); window.location.href='index.html'"
+          >
+            Logout
+          </button>
+        </nav>
+      </header>
+
+      <main class="dashboard-main">
+        <section class="card wide">
+          <div class="card-header">
+            <h1 class="card-title">Transfer Money</h1>
+          </div>
+
+          <form id="transferForm" class="form two-column">
+            <div class="form-group">
+              <label for="transferMode">Transfer Mode</label>
+              <select id="transferMode" required>
+                <option value="">Select mode</option>
+                <option value="neft">NEFT</option>
+                <option value="rtgs">RTGS</option>
+                <option value="imps">IMPS</option>
+                <option value="within-bank">Within Bank Transfer</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="toAccount">Recipient Account Number</label>
+              <input
+                type="text"
+                id="toAccount"
+                placeholder="Enter recipient account number"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="ifscCode">IFSC Code</label>
+              <input
+                type="text"
+                id="ifscCode"
+                placeholder="Enter IFSC code"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="toName">Recipient Name (for reference)</label>
+              <input
+                type="text"
+                id="toName"
+                placeholder="Optional"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="transferAccountType">Account Type</label>
+              <select id="transferAccountType">
+                <option value="">Select account type</option>
+                <option value="savings">Savings</option>
+                <option value="salary">Salary</option>
+                <option value="od-account">OD account</option>
+                <option value="nri-account">NRI account</option>
+                <option value="business-account">Business account</option>
+                <option value="joint-account">Joint account</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="transferAmount">Amount (₹)</label>
+              <input
+                type="text"
+                id="transferAmount"
+                min="1"
+                step="100"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="transferNote">Note</label>
+              <input
+                type="text"
+                id="transferNote"
+                placeholder="e.g. Rent payment"
+              />
+            </div>
+
+            <div class="form-full">
+              <div id="transferError" class="alert alert-error hidden"></div>
+              <div id="transferSuccess" class="alert alert-success hidden"></div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">
+                Send Money
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost"
+                onclick="window.location.href='dashboard.html'"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <div class="footer-grid">
+          <div>
+            <p class="muted">Contact</p>
+            <p class="footer-line">Email: sample@gmail.com</p>
+            <p class="footer-line">Email: sample1@gmail.com</p>
+            <p class="footer-line">Phone: 9123456789 / 8123456789</p>
+          </div>
+          <div>
+            <p class="muted">Address</p>
+            <p class="footer-line">
+              No:007 randy garden rocky Street,
+            </p>
+            <p class="footer-line">
+              royalnagar Chennai-123456.
+            </p>
+          </div>
+          <div>
+            <p class="muted">Connect</p>
+            <p class="footer-line">
+              <a href="#" target="_blank">Facebook</a> ·
+              <a href="#" target="_blank">Instagram</a> ·
+              <a href="#" target="_blank">WhatsApp</a>
+            </p>
+            <p class="footer-line">
+              <a href="#" target="_blank">View location on map</a>
+            </p>
+          </div>
+        </div>
+        <p class="footer-copy">
+          © <span id="year"></span> JPND Bank. All rights reserved.
+        </p>
+      </footer>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/storage.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/transfer.js"></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+  </html>
+
+
+
+

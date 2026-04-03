@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JPND Bank | Net Banking Login</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="theme-light">
+    <div class="app-shell">
+      <header class="app-header app-header-auth">
+        <div class="logo">
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23002366;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23003d99;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='20' cy='20' r='18' fill='url(%23grad)'/%3E%3Ctext x='20' y='26' font-family='Arial, sans-serif' font-size='18' font-weight='bold' fill='white' text-anchor='middle'%3EJD%3C/text%3E%3C/svg%3E" alt="JPND Bank Logo" class="logo-img" />
+          <span class="logo-text">JPND Bank</span>
+        </div>
+        <nav class="header-nav">
+          <a href="index.html" class="link-light">Home</a>
+        </nav>
+      </header>
+
+      <main class="auth-main">
+        <section class="auth-card">
+          <h1 class="auth-title">Welcome back</h1>
+          <p class="auth-subtitle">Secure online banking dashboard</p>
+
+          <form id="loginForm" class="form">
+            <input type="hidden" id="loginRole" value="user" />
+
+            <div class="form-group">
+              <label for="loginEmail">Email / Account Number / Phone</label>
+              <input
+                type="text"
+                id="loginEmail"
+                placeholder="you@example.com or 700010001 or 9876543210"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="loginPassword">Password</label>
+              <div class="password-input-wrapper">
+                <input
+                  type="password"
+                  id="loginPassword"
+                  placeholder="Enter your password"
+                  required
+                />
+                <button
+                  type="button"
+                  class="password-toggle"
+                  id="loginPasswordToggle"
+                  aria-label="Toggle password visibility"
+                >
+                  <span class="eye-icon">👁</span>
+                </button>
+              </div>
+            </div>
+
+            <p class="login-recovery-links" id="loginRecoveryLinks">
+              <a href="#" id="linkForgotEmail" class="link-accent">Forgot email?</a>
+              <span class="muted login-recovery-sep">·</span>
+              <a href="#" id="linkForgotPassword" class="link-accent">Forgot password?</a>
+            </p>
+
+            <div id="loginError" class="alert alert-error hidden"></div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">
+                Submit
+              </button>
+              <button
+                type="button"
+                id="loginResetBtn"
+                class="btn btn-ghost"
+              >
+                Reset
+              </button>
+            </div>
+
+            <p class="auth-footer-text">
+              <strong>New to JPND Bank? <a href="register.html?mode=register">Register as a new customer</a></strong>
+            </p>
+          </form>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <div class="footer-grid">
+          <div>
+            <p class="muted">Contact</p>
+            <p class="footer-line">Email: sample@gmail.com</p>
+            <p class="footer-line">Email: sample1@gmail.com</p>
+            <p class="footer-line">Phone: 9123456789 / 8123456789</p>
+          </div>
+          <div>
+            <p class="muted">Address</p>
+            <p class="footer-line">
+              No:007 randy garden rocky Street,
+            </p>
+            <p class="footer-line">
+              royalnagar Chennai-123456.
+            </p>
+          </div>
+          <div>
+            <p class="muted">Connect</p>
+            <p class="footer-line">
+              <a href="#" target="_blank">Facebook</a> ·
+              <a href="#" target="_blank">Instagram</a> ·
+              <a href="#" target="_blank">WhatsApp</a>
+            </p>
+            <p class="footer-line">
+              <a href="#" target="_blank">View location on map</a>
+            </p>
+          </div>
+        </div>
+        <p class="footer-copy">
+          © <span id="year"></span> JPND Bank. All rights reserved.
+        </p>
+      </footer>
+    </div>
+
+    <!-- Forgot email -->
+    <div id="modalForgotEmail" class="modal hidden" aria-hidden="true">
+      <div class="modal-backdrop" data-close-forgot-email></div>
+      <div class="modal-content">
+        <h2>Recover your email</h2>
+        <p class="muted small-print">
+          Enter your account number, registered mobile number, and date of birth
+          as on file (format DD/MM/YYYY). We will show your registered email after
+          OTP verification.
+        </p>
+        <form id="forgotEmailForm" class="form">
+          <div class="form-group">
+            <label for="recoverAccount">Account number</label>
+            <input type="text" id="recoverAccount" required autocomplete="off" />
+          </div>
+          <div class="form-group">
+            <label for="recoverPhone">Registered phone</label>
+            <input type="tel" id="recoverPhone" required autocomplete="tel" />
+          </div>
+          <div class="form-group">
+            <label for="recoverDob">Date of birth</label>
+            <input
+              type="text"
+              id="recoverDob"
+              placeholder="DD/MM/YYYY"
+              required
+              maxlength="10"
+            />
+          </div>
+          <div id="forgotEmailError" class="alert alert-error hidden"></div>
+          <div id="forgotEmailSuccess" class="alert alert-success hidden"></div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" data-close-forgot-email>
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">Continue</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Forgot password -->
+    <div id="modalForgotPassword" class="modal hidden" aria-hidden="true">
+      <div class="modal-backdrop" data-close-forgot-password></div>
+      <div class="modal-content">
+        <h2>Reset your password</h2>
+        <p class="muted small-print">
+          Enter your account number and registered mobile number. After OTP, you can
+          set a new password.
+        </p>
+        <form id="forgotPasswordForm" class="form">
+          <div class="form-group">
+            <label for="fpAccount">Account number</label>
+            <input type="text" id="fpAccount" required autocomplete="off" />
+          </div>
+          <div class="form-group">
+            <label for="fpPhone">Registered phone</label>
+            <input type="tel" id="fpPhone" required autocomplete="tel" />
+          </div>
+          <div class="form-group">
+            <label for="fpNewPassword">New password</label>
+            <input type="password" id="fpNewPassword" minlength="6" required />
+          </div>
+          <div class="form-group">
+            <label for="fpConfirmPassword">Confirm new password</label>
+            <input type="password" id="fpConfirmPassword" minlength="6" required />
+          </div>
+          <div id="forgotPasswordError" class="alert alert-error hidden"></div>
+          <div id="forgotPasswordSuccess" class="alert alert-success hidden"></div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" data-close-forgot-password>
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">Reset password</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/storage.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+  </html>
+
+

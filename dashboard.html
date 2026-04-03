@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JPND Bank | Dashboard</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="theme-light">
+    <div class="app-shell">
+      <header class="app-header app-header-auth">
+        <div class="logo">
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23002366;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23003d99;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='20' cy='20' r='18' fill='url(%23grad)'/%3E%3Ctext x='20' y='26' font-family='Arial, sans-serif' font-size='18' font-weight='bold' fill='white' text-anchor='middle'%3EJD%3C/text%3E%3C/svg%3E" alt="JPND Bank Logo" class="logo-img" />
+          <span class="logo-text">JPND Bank</span>
+        </div>
+        <nav class="header-nav">
+          <span id="welcomeUser" class="chip"></span>
+          <button id="logoutBtn" class="btn btn-ghost btn-sm">Logout</button>
+        </nav>
+      </header>
+
+      <main class="dashboard-main">
+        <section id="kycBanner" class="card hidden" style="border-left: 4px solid #ca8a04;">
+          <h2 class="card-title" style="margin-top: 0;">Verify your identity (KYC)</h2>
+          <p class="muted" style="margin: 0;">
+            Complete selfie + ID verification to reduce fraud and strengthen your account.
+          </p>
+          <a href="kyc.html" class="btn btn-primary btn-sm mt-sm">Complete KYC</a>
+        </section>
+        <section class="grid grid-3">
+          <article class="card highlight">
+            <h2 class="card-title">Account Overview</h2>
+            <p class="muted">Account Number</p>
+            <p id="accountNumber" class="text-xl code"></p>
+            <div class="balance-row">
+              <div>
+                <p class="muted">Current Balance</p>
+                <p id="currentBalance" class="balance-amount">₹0.00</p>
+              </div>
+              <div>
+                <p class="muted">Last Updated</p>
+                <p id="lastUpdated" class="muted">-</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Quick Actions</h2>
+            <form id="quickActionsForm" class="form">
+              <div class="form-group">
+                <label for="actionType">Action</label>
+                <select id="actionType">
+                  <option value="deposit">Deposit</option>
+                  <option value="withdraw">Withdraw</option>
+                </select>
+              </div>
+              <div class="form-group">
+              <label for="actionAmount">Amount (₹)</label>
+              <input
+                type="text"
+                id="actionAmount"
+                required
+              />
+              </div>
+              <div id="quickActionError" class="alert alert-error hidden"></div>
+              <button type="submit" class="btn btn-primary btn-block">
+                Submit
+              </button>
+            </form>
+
+            <hr class="mt-md" />
+
+            <form id="quickServicesForm" class="form mt-sm">
+              <div class="form-group">
+                <label for="serviceType">Quick Services</label>
+                <select id="serviceType">
+                  <option value="">Select a service</option>
+                  <option value="general-banking">General Banking</option>
+                  <option value="insurance">Insurance</option>
+                  <option value="investment">Investment</option>
+                  <option value="cards">Cards</option>
+                  <option value="loan">Loan</option>
+                  <option value="demat">Demat</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">
+                Open Service
+              </button>
+            </form>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Navigation</h2>
+            <div class="button-stack">
+              <button
+                class="btn btn-primary btn-block"
+                onclick="window.location.href='transfer.html'"
+              >
+                Transfer Money
+              </button>
+              <button
+                class="btn btn-primary btn-block"
+                id="viewStatementBtn"
+              >
+                View Statement
+              </button>
+              <button
+                class="btn btn-primary btn-block"
+                id="editProfileBtn"
+              >
+                Edit Profile
+              </button>
+              <button
+                class="btn btn-primary btn-block"
+                id="deleteAccountBtn"
+              >
+                Close Account
+              </button>
+            </div>
+          </article>
+        </section>
+
+        <section class="card mt-lg">
+          <div class="card-header">
+            <h2 class="card-title">Credit Risk Early-Warning</h2>
+          </div>
+          <div id="creditRiskBox" class="muted">Loading risk status...</div>
+          <div id="creditRiskActions" class="muted mt-sm"></div>
+        </section>
+
+        <section class="card mt-lg">
+          <div class="card-header">
+            <h2 class="card-title">Personal Finance Copilot</h2>
+          </div>
+          <form id="financePrefsForm" class="form two-column">
+            <div class="form-group">
+              <label for="financeBudgetCategory">Budget Category</label>
+              <input type="text" id="financeBudgetCategory" placeholder="Example: Food - Dining" />
+            </div>
+            <div class="form-group">
+              <label for="financeBudgetAmount">Monthly Budget (₹)</label>
+              <input type="number" id="financeBudgetAmount" min="0" step="1" placeholder="Example: 5000" />
+            </div>
+            <div class="form-group">
+              <label for="financeGoalAmount">Savings Goal Target (₹)</label>
+              <input type="number" id="financeGoalAmount" min="0" step="1" placeholder="Example: 20000" />
+            </div>
+            <div class="form-group">
+              <label for="financeGoalDue">Goal Due Date</label>
+              <input type="date" id="financeGoalDue" />
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Save Budget / Goal</button>
+            </div>
+          </form>
+          <div id="financePrefsMsg" class="muted mt-sm"></div>
+          <div id="financeCopilotBox" class="muted">Loading insights...</div>
+        </section>
+
+        <section class="card mt-lg">
+          <div class="card-header">
+            <h2 class="card-title">Retention Health</h2>
+          </div>
+          <div id="churnBox" class="muted">Loading retention status...</div>
+        </section>
+
+        <section class="card mt-lg">
+          <div class="card-header">
+            <h2 class="card-title">AI Advisor (Insurance & Investment)</h2>
+          </div>
+          <form id="aiAdvisorForm" class="form two-column">
+            <div class="form-group">
+              <label for="aiGoal">Goal</label>
+              <select id="aiGoal">
+                <option value="wealth-creation">Wealth Creation</option>
+                <option value="retirement-planning">Retirement Planning</option>
+                <option value="tax-saving">Tax Saving</option>
+                <option value="family-protection">Family Protection</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="aiRiskLevel">Risk Preference</label>
+              <select id="aiRiskLevel">
+                <option value="low">Low</option>
+                <option value="moderate" selected>Moderate</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Get Recommendations</button>
+            </div>
+          </form>
+          <div id="aiAdvisorError" class="alert alert-error hidden"></div>
+          <div id="aiAdvisorDisclaimer" class="muted mt-sm"></div>
+          <div class="grid grid-2 mt-md">
+            <article class="card">
+              <h3 class="card-title">Insurance Picks</h3>
+              <div id="aiInsuranceList" class="muted">No recommendations yet.</div>
+            </article>
+            <article class="card">
+              <h3 class="card-title">Investment Picks</h3>
+              <div id="aiInvestmentList" class="muted">No recommendations yet.</div>
+            </article>
+          </div>
+        </section>
+
+        <section class="card mt-lg">
+          <div class="card-header">
+            <h2 class="card-title">AI Financial Assistant</h2>
+          </div>
+          <div id="aiChatMessages" class="card" style="max-height: 240px; overflow:auto;">
+            <p class="muted">Ask about insurance, investment, tax-saving, or risk.</p>
+          </div>
+          <form id="aiChatForm" class="form mt-sm">
+            <div class="form-group">
+              <label for="aiChatInput">Ask a question</label>
+              <input
+                type="text"
+                id="aiChatInput"
+                placeholder="Example: Which investment is better for moderate risk?"
+                required
+              />
+              <input type="hidden" id="aiChatForcedTopicKey" value="" />
+            </div>
+            <div id="aiChatChips" class="ai-chat-chips">
+              <p class="muted" style="margin: 0.25rem 0 0;">Insurance topics</p>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Explain Coverage & Benefits in health insurance"
+                data-ai-topic-key="coverage_benefits"
+              >
+                Coverage & Benefits
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="What affects Premium & Cost in health insurance?"
+                data-ai-topic-key="premium_cost"
+              >
+                Premium & Cost
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="How does Claim Process work in health insurance?"
+                data-ai-topic-key="claim_process"
+              >
+                Claim Process
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="How does Network & Accessibility (cashless) work?"
+                data-ai-topic-key="network_accessibility"
+              >
+                Network & Accessibility
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="What is Sum Insured / Coverage Amount in health insurance?"
+                data-ai-topic-key="sum_insured"
+              >
+                Sum Insured
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="What are Waiting Periods in health insurance?"
+                data-ai-topic-key="waiting_periods"
+              >
+                Waiting Periods
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Explain Renewal & Lifetime Benefits in health insurance"
+                data-ai-topic-key="renewal_lifetime"
+              >
+                Renewal & Lifetime
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="What are Exclusions & Limitations in health insurance?"
+                data-ai-topic-key="exclusions_limitations"
+              >
+                Exclusions & Limitations
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="How flexible is the policy (policy flexibility) in health insurance?"
+                data-ai-topic-key="policy_flexibility"
+              >
+                Policy Flexibility
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="What are Tax Benefits in India for health insurance (80D)?"
+                data-ai-topic-key="tax_benefits_india"
+              >
+                Tax Benefits (India)
+              </button>
+
+              <p class="muted" style="margin: 0.5rem 0 0;">Investment topics</p>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Goal clarity: purpose, time horizon, income vs growth for this investment"
+                data-ai-topic-key="goal_clarity"
+              >
+                Goal Clarity
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Returns & expectations: expected return, guaranteed vs market-linked, historical performance"
+                data-ai-topic-key="returns_expectations"
+              >
+                Returns & Expectations
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Risk level: low/medium/high risk, losses in downturn, worst-case scenario"
+                data-ai-topic-key="risk_level"
+              >
+                Risk Level
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Liquidity: can I withdraw anytime, lock-in period, penalties for early withdrawal?"
+                data-ai-topic-key="liquidity"
+              >
+                Liquidity
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Investment type understanding: how it works, factors affecting returns, regulation like SEBI"
+                data-ai-topic-key="how_it_works"
+              >
+                How it Works / Regulation
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Costs & charges: expense ratio, brokerage, exit load, hidden charges, fee impact"
+                data-ai-topic-key="costs_charges"
+              >
+                Costs & Charges
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Tax implications India: capital gains (STCG/LTCG), dividend/interest, 80C eligibility, post-tax return"
+                data-ai-topic-key="tax_india"
+              >
+                Tax (India)
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Flexibility: increase/decrease amount, switch funds/plans, SIP availability"
+                data-ai-topic-key="flexibility"
+              >
+                Flexibility / SIP
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Diversification: allocation, avoid putting all money in one place, recommended %"
+                data-ai-topic-key="diversification"
+              >
+                Diversification
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Safety & credibility: who manages it, trustworthiness, track record"
+                data-ai-topic-key="safety_credibility"
+              >
+                Safety & Credibility
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Inflation impact: will it beat inflation, real return after inflation"
+                data-ai-topic-key="inflation"
+              >
+                Inflation Impact
+              </button>
+              <p class="muted" style="margin: 0.5rem 0 0;">Commercial banking topics</p>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Basics of Commercial Banks: What is a commercial bank and how is it different from RBI central bank?"
+                data-ai-topic-key="basics_commercial_banks"
+              >
+                Basics of Banks
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Core Banking Functions: primary functions vs secondary (agency/utility services) and role of banks in money creation"
+                data-ai-topic-key="core_banking_functions"
+              >
+                Core Functions
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Types of Deposits: Savings account, Current account, Fixed deposit (FD), Recurring deposit (RD) features"
+                data-ai-topic-key="types_of_deposits"
+              >
+                Types of Deposits
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Loans & Advances: types of loans and difference between secured and unsecured loans; how interest is calculated"
+                data-ai-topic-key="loans_and_advances"
+              >
+                Loans & Advances
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Interest Rates & Policies: repo rate, reverse repo rate, how RBI controls bank interest rates, base rate/MCLR"
+                data-ai-topic-key="interest_rates_policies"
+              >
+                Interest Rates
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Regulatory Framework: who regulates commercial banks in India, CRR, SLR, Basel norms"
+                data-ai-topic-key="regulatory_framework"
+              >
+                Regulatory Framework
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Safety & Security: is my money safe in a bank, deposit insurance DICGC coverage, what happens if a bank fails"
+                data-ai-topic-key="safety_security"
+              >
+                Safety & Security
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-ai-chip="Digital Banking: internet banking, mobile banking, UPI how it works, risks in digital transactions"
+                data-ai-topic-key="digital_banking"
+              >
+                Digital Banking
+              </button>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Ask AI Assistant</button>
+            </div>
+          </form>
+          <p id="aiChatDisclaimer" class="muted mt-sm"></p>
+        </section>
+
+        <section class="card mt-lg">
+          <div class="card-header">
+            <h2 class="card-title">AI Voice Banking</h2>
+          </div>
+          <p class="muted">
+            Use voice to check balance, transfer money, or block card. Sensitive actions require a
+            password confirmation (step-up).
+          </p>
+          <div id="voiceCardStatus" class="muted mt-sm">Card status: loading...</div>
+          <div class="button-stack horizontal mt-sm">
+            <button type="button" id="voiceStartBtn" class="btn btn-primary btn-sm">
+              Start Voice
+            </button>
+            <button type="button" id="voiceStopBtn" class="btn btn-ghost btn-sm" disabled>
+              Stop
+            </button>
+            <button type="button" id="voiceUnblockShortcutBtn" class="btn btn-ghost btn-sm">
+              Unblock Card (Voice)
+            </button>
+          </div>
+          <div class="form-group mt-sm">
+            <label for="voiceTranscript">Transcript</label>
+            <input type="text" id="voiceTranscript" placeholder="Speak or type here..." />
+          </div>
+          <div class="button-stack horizontal">
+            <button type="button" id="voiceAnalyzeBtn" class="btn btn-ghost btn-sm">
+              Analyze
+            </button>
+            <button type="button" id="voiceExecuteBtn" class="btn btn-primary btn-sm" disabled>
+              Execute
+            </button>
+          </div>
+          <div id="voiceResult" class="muted mt-sm">Waiting for voice input...</div>
+          <div id="voiceStepUpBox" class="mt-sm hidden">
+            <div class="form-group">
+              <label for="voiceStepUpPassword">Confirm Password (step-up)</label>
+              <input type="password" id="voiceStepUpPassword" placeholder="Enter your password" />
+            </div>
+            <button type="button" id="voiceStepUpBtn" class="btn btn-primary btn-sm">
+              Verify & Enable Execute
+            </button>
+          </div>
+        </section>
+
+        <section class="card mt-lg">
+          <div class="card-header">
+            <h2 class="card-title">Recent Activity</h2>
+            <button
+              class="btn btn-link"
+              onclick="window.location.href='transactions.html'"
+            >
+              View all
+            </button>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Mode</th>
+                <th>Account</th>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Prev Balance</th>
+                <th>New Balance</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="recentTransactionsBody">
+              <tr>
+                <td colspan="8" class="muted text-center">
+                  No transactions yet.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="profileModal" class="modal hidden">
+          <div class="modal-backdrop"></div>
+          <div class="modal-content">
+            <h2>Edit Profile</h2>
+            <form id="profileForm" class="form">
+              <div class="form-group">
+                <label for="profileName">Full Name</label>
+                <input type="text" id="profileName" required />
+              </div>
+              <div class="form-group">
+                <label for="profileEmail">Email</label>
+                <input type="email" id="profileEmail" required />
+              </div>
+              <div class="form-group">
+                <label for="profilePhone">Phone</label>
+                <input type="tel" id="profilePhone" required />
+              </div>
+              <div class="form-group">
+                <label for="profilePassword">New Password (optional)</label>
+                <div class="password-input-wrapper">
+                  <input
+                    type="password"
+                    id="profilePassword"
+                    placeholder="Leave blank to keep existing"
+                  />
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    id="profilePasswordToggle"
+                    aria-label="Toggle password visibility"
+                  >
+                    <span class="eye-icon">👁</span>
+                  </button>
+                </div>
+              </div>
+              <div id="profileError" class="alert alert-error hidden"></div>
+              <div class="modal-actions">
+                <button type="button" class="btn btn-ghost" data-close-modal>
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <div class="footer-grid">
+          <div>
+            <p class="muted">Contact</p>
+            <p class="footer-line">Email: sample@gmail.com</p>
+            <p class="footer-line">Email: sample1@gmail.com</p>
+            <p class="footer-line">Phone: 9123456789 / 8123456789</p>
+          </div>
+          <div>
+            <p class="muted">Address</p>
+            <p class="footer-line">
+              No:007 randy garden rocky Street,
+            </p>
+            <p class="footer-line">
+              royalnagar Chennai-123456.
+            </p>
+          </div>
+          <div>
+            <p class="muted">Connect</p>
+            <p class="footer-line">
+              <a href="#" target="_blank">Facebook</a> ·
+              <a href="#" target="_blank">Instagram</a> ·
+              <a href="#" target="_blank">WhatsApp</a>
+            </p>
+            <p class="footer-line">
+              <a href="#" target="_blank">View location on map</a>
+            </p>
+          </div>
+        </div>
+        <p class="footer-copy">
+          © <span id="year"></span> JPND Bank. All rights reserved.
+        </p>
+      </footer>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/storage.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+  </html>
+
+
+
+

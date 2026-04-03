@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JPND Bank | Loan Sanction Prediction</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="theme-light">
+    <div class="app-shell">
+      <header class="app-header app-header-auth">
+        <div class="logo">
+          <span class="logo-mark">JD</span>
+          <span class="logo-text">JPND Bank</span>
+        </div>
+        <nav class="header-nav">
+          <button
+            class="btn btn-ghost btn-sm"
+            onclick="window.location.href='dashboard.html'"
+          >
+            Back to Dashboard
+          </button>
+          <button
+            class="btn btn-ghost btn-sm"
+            onclick="clearSession(); window.location.href='index.html'"
+          >
+            Logout
+          </button>
+        </nav>
+      </header>
+
+      <main class="dashboard-main">
+        <section class="card">
+          <div class="card-header">
+            <h1 class="card-title">AI Loan Sanction Prediction (Phase-1)</h1>
+          </div>
+
+          <p class="muted mt-sm">
+            This is a rules-based pre-check to estimate affordability. It is not a final
+            loan approval.
+          </p>
+
+          <section class="card mt-md">
+            <div class="card-header">
+              <h2 class="card-title">Document AI (OCR + Classification)</h2>
+            </div>
+            <p class="muted">
+              Upload salary slip or bank statement. AI extracts key values and can auto-fill income/EMI.
+            </p>
+            <div class="form two-column">
+              <div class="form-group">
+                <label for="loanDocFile">Loan Document (image/PDF)</label>
+                <input type="file" id="loanDocFile" accept=".jpg,.jpeg,.png,.webp,.pdf" multiple />
+              </div>
+              <div class="form-group">
+                <label for="loanDocStatedIncome">Stated Monthly Income for verification (optional)</label>
+                <input type="text" id="loanDocStatedIncome" placeholder="Example: 45000" />
+              </div>
+              <div class="form-actions">
+                <button type="button" id="loanDocExtractBtn" class="btn btn-ghost">
+                  Analyze Document
+                </button>
+              </div>
+            </div>
+            <div id="loanDocAiMsg" class="muted mt-sm"></div>
+            <div id="loanDocAiResult" class="muted mt-sm" style="white-space: pre-wrap;"></div>
+          </section>
+
+          <form id="loanSanctionForm" class="form mt-md">
+            <div class="form-group">
+              <label for="loanType">Loan Type</label>
+              <select id="loanType" required>
+                <option value="personal">Personal loan</option>
+                <option value="home">Home loan</option>
+                <option value="vehicle">Vehicle loan</option>
+                <option value="business">Business loan</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="loanAmount">Loan Amount (₹)</label>
+              <input type="text" id="loanAmount" required />
+            </div>
+
+            <div class="form-group">
+              <label for="tenureMonths">Tenure (Months)</label>
+              <input type="number" id="tenureMonths" required min="1" max="600" />
+            </div>
+
+            <div class="form-group">
+              <label for="monthlyIncome">Monthly Income (₹)</label>
+              <input type="text" id="monthlyIncome" required />
+            </div>
+
+            <div class="form-group">
+              <label for="existingEmiTotal">Existing EMIs Total (₹/month)</label>
+              <input type="text" id="existingEmiTotal" value="0" required />
+            </div>
+
+            <div class="form-group">
+              <label for="creditScore">Credit Score (optional, 300-850)</label>
+              <input type="number" id="creditScore" min="300" max="850" />
+            </div>
+
+            <div class="form-group">
+              <label for="loanDob">Date of Birth (optional)</label>
+              <input type="date" id="loanDob" />
+            </div>
+
+            <div class="form-group">
+              <label>
+                <input type="checkbox" id="securedLoan" />
+                Secured loan (collateral available)
+              </label>
+            </div>
+
+            <div class="form-group" id="collateralGroup">
+              <label for="collateralValue">Collateral Value (₹) (if secured)</label>
+              <input type="text" id="collateralValue" placeholder="Optional for secured loan" />
+            </div>
+
+            <div id="loanSanctionError" class="alert alert-error hidden"></div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Predict Sanction</button>
+            </div>
+          </form>
+
+          <div id="loanSanctionResult" class="card mt-lg hidden"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/storage.js"></script>
+    <script src="assets/js/loan-sanction.js"></script>
+  </body>
+</html>
+

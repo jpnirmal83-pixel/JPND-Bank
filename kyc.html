@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>JPND Bank | KYC Verification</title>
+
+    <link rel="stylesheet" href="assets/css/styles.css" />
+
+  </head>
+
+  <body class="theme-light">
+
+    <div class="app-shell">
+
+      <header class="app-header">
+
+        <div class="logo">
+
+          <span class="logo-mark">JD</span>
+
+          <span class="logo-text">JPND Bank</span>
+
+        </div>
+
+        <nav class="header-nav">
+
+          <a href="dashboard.html" class="link-light">Dashboard</a>
+
+          <a href="login.html" class="link-light">Logout</a>
+
+        </nav>
+
+      </header>
+
+
+
+      <main class="auth-main">
+
+        <section class="auth-card wide">
+
+          <h1 class="auth-title">Identity verification (KYC)</h1>
+
+          <p class="auth-subtitle muted">
+
+            Click <strong>Start camera &amp; liveness</strong>, then add your ID photo. If a selfie was
+
+            not saved after the blink step, your photo is captured from the live camera when you click
+
+            <strong>Submit for verification</strong>. Your selfie and ID are stored for verification.
+
+          </p>
+
+          <div id="kycStatusLine" class="muted mt-sm"></div>
+
+
+
+          <div id="kycActiveFlow">
+
+            <div class="kyc-live-block mt-md">
+
+              <h2 class="auth-title" style="font-size: 1.1rem">Live liveness</h2>
+
+              <p class="muted" style="margin-top: 0">
+
+                Allow camera access, then blink once. Your selfie is captured from the video — do not
+
+                upload a static selfie file.
+
+              </p>
+
+              <video
+
+                id="kycLiveVideo"
+
+                class="kyc-video"
+
+                playsinline
+
+                muted
+
+                autoplay
+
+                aria-label="Camera preview for liveness"
+
+              ></video>
+
+              <div id="kycLiveStatus" class="muted mt-sm" aria-live="polite"></div>
+
+              <div class="form-actions" style="margin-top: 0.75rem">
+
+                <button type="button" class="btn btn-secondary" id="kycStartLiveBtn">
+
+                  Start camera &amp; liveness
+
+                </button>
+
+              </div>
+
+              <p id="kycSelfieReadyLine" class="muted mt-sm hidden">Selfie ready (captured from live video).</p>
+
+              <input type="file" id="kycSelfie" class="hidden" accept="image/jpeg" tabindex="-1" />
+
+            </div>
+
+
+
+            <form id="kycForm" class="form mt-md">
+
+              <div class="form-group">
+
+                <label for="kycId">ID document (photo page)</label>
+
+                <input type="file" id="kycId" accept="image/jpeg,image/png,image/webp" required />
+
+              </div>
+
+              <div class="form-actions">
+
+                <button type="submit" class="btn btn-primary" id="kycSubmitBtn">Submit for verification</button>
+
+              </div>
+
+            </form>
+
+          </div>
+
+
+
+          <div id="kycError" class="alert alert-error hidden"></div>
+
+          <div id="kycSuccess" class="alert alert-success hidden"></div>
+
+          <p id="kycResultDetail" class="muted mt-md hidden" style="white-space: pre-wrap"></p>
+
+        </section>
+
+      </main>
+
+
+
+      <footer class="app-footer">
+
+        <p class="footer-copy">© <span id="year"></span> JPND Bank. All rights reserved.</p>
+
+      </footer>
+
+    </div>
+
+
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/storage.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+
+    <script src="assets/js/kyc_liveness.js"></script>
+
+    <script src="assets/js/kyc.js"></script>
+
+    <script>
+
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+    </script>
+
+  </body>
+
+</html>
+

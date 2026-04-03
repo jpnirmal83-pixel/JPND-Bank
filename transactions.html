@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JPND Bank | Transactions</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="theme-light">
+    <div class="app-shell">
+      <header class="app-header app-header-auth">
+        <div class="logo">
+          <span class="logo-mark">JD</span>
+          <span class="logo-text">JPND Bank</span>
+        </div>
+        <nav class="header-nav">
+          <button
+            class="btn btn-ghost btn-sm"
+            onclick="window.location.href='dashboard.html'"
+          >
+            Back to Dashboard
+          </button>
+          <button
+            class="btn btn-ghost btn-sm"
+            onclick="clearSession(); window.location.href='index.html'"
+          >
+            Logout
+          </button>
+        </nav>
+      </header>
+
+      <main class="dashboard-main">
+        <section class="card">
+          <div class="card-header">
+            <h1 class="card-title">Transaction History</h1>
+            <div class="button-stack horizontal">
+              <button
+                type="button"
+                id="downloadExcelBtn"
+                class="btn btn-primary btn-sm"
+              >
+                Download Excel
+              </button>
+              <button
+                type="button"
+                id="downloadPdfBtn"
+                class="btn btn-primary btn-sm"
+              >
+                Download PDF
+              </button>
+            </div>
+          </div>
+
+          <div class="type-filter">
+            <div class="form-group">
+              <label for="filterType">Type</label>
+              <select id="filterType">
+                <option value="all">All</option>
+                <option value="deposit">Deposit</option>
+                <option value="withdraw">Withdrawal</option>
+                <option value="transfer-out">Transfer Out</option>
+                <option value="transfer-in">Transfer In</option>
+              </select>
+            </div>
+          </div>
+
+          <form id="filterForm" class="form filters">
+            <div class="form-group">
+              <label>From (Day / Month / Year)</label>
+              <div class="date-row">
+                <select id="fromDay"></select>
+                <select id="fromMonth"></select>
+                <select id="fromYear"></select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>To (Day / Month / Year)</label>
+              <div class="date-row">
+                <select id="toDay"></select>
+                <select id="toMonth"></select>
+                <select id="toYear"></select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Statement Range</label>
+              <div>
+                <label>
+                  <input
+                    type="radio"
+                    name="statementRange"
+                    value="all"
+                    checked
+                  />
+                  All
+                </label>
+                <br />
+                <label>
+                  <input
+                    type="radio"
+                    name="statementRange"
+                    value="one-month"
+                  />
+                  Last 1 month statement
+                </label>
+                <br />
+                <label>
+                  <input
+                    type="radio"
+                    name="statementRange"
+                    value="mini-10"
+                  />
+                  Mini statement (last 10 days)
+                </label>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Apply</button>
+              <button type="button" id="resetFilters" class="btn btn-primary">
+                Reset
+              </button>
+            </div>
+          </form>
+
+          <table class="table mt-md">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Mode</th>
+                <th>Account</th>
+                <th>Name</th>
+                <th class="text-right">Amount</th>
+                <th class="text-right">Prev Balance</th>
+                <th class="text-right">New Balance</th>
+                <th>Time</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="transactionsBody">
+              <tr>
+                <td colspan="9" class="muted text-center">
+                  No transactions yet.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <div class="footer-grid">
+          <div>
+            <p class="muted">Contact</p>
+            <p class="footer-line">Email: sample@gmail.com</p>
+            <p class="footer-line">Email: sample1@gmail.com</p>
+            <p class="footer-line">Phone: 9123456789 / 8123456789</p>
+          </div>
+          <div>
+            <p class="muted">Address</p>
+            <p class="footer-line">
+              No:007 randy garden rocky Street,
+            </p>
+            <p class="footer-line">
+              royalnagar Chennai-123456.
+            </p>
+          </div>
+          <div>
+            <p class="muted">Connect</p>
+            <p class="footer-line">
+              <a href="#" target="_blank">Facebook</a> ·
+              <a href="#" target="_blank">Instagram</a> ·
+              <a href="#" target="_blank">WhatsApp</a>
+            </p>
+            <p class="footer-line">
+              <a href="#" target="_blank">View location on map</a>
+            </p>
+          </div>
+        </div>
+        <p class="footer-copy">
+          © <span id="year"></span> JPND Bank. All rights reserved.
+        </p>
+      </footer>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/storage.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/transactions.js"></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+  </html>
+
+
+
+

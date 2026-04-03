@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JPND Bank | Registration</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="theme-light">
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="logo">
+          <span class="logo-mark">JD</span>
+          <span class="logo-text">JPND Bank</span>
+        </div>
+        <nav class="header-nav">
+          <a href="login.html" class="link-light">Back to Login</a>
+        </nav>
+      </header>
+
+      <main class="auth-main">
+        <section class="auth-card wide">
+          <h1 class="auth-title" id="registerTitle">Registration form</h1>
+          <p class="auth-subtitle" id="registerSubtitle"></p>
+
+          <form id="registerForm" class="form two-column">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input
+                type="text"
+                id="name"
+                placeholder="John David"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input
+                type="tel"
+                id="phone"
+                placeholder="+91 98765 43210"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password</label>
+              <div class="password-input-wrapper">
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Create a strong password"
+                  minlength="6"
+                  required
+                />
+                <button
+                  type="button"
+                  class="password-toggle"
+                  id="passwordToggle"
+                  aria-label="Toggle password visibility"
+                >
+                  <span class="eye-icon">👁</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password</label>
+              <div class="password-input-wrapper">
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  placeholder="Re-enter password"
+                  minlength="6"
+                  required
+                />
+                <button
+                  type="button"
+                  class="password-toggle"
+                  id="confirmPasswordToggle"
+                  aria-label="Toggle password visibility"
+                >
+                  <span class="eye-icon">👁</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="gender">Gender</label>
+              <select id="gender" required>
+                <option value="">Select gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="dob">DOB</label>
+              <input
+                type="text"
+                id="dob"
+                placeholder="DD/MM/YYYY"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="address">Address</label>
+              <input
+                type="text"
+                id="address"
+                placeholder="Enter your address"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="accountType">Open an account</label>
+              <select id="accountType">
+                <option value="">Select account type</option>
+                <option value="savings">Savings</option>
+                <option value="salary">Salary</option>
+                <option value="od-account">OD account</option>
+                <option value="nri-account">NRI account</option>
+                <option value="business-account">Business account</option>
+                <option value="joint-account">Joint account</option>
+                <option value="rural-account">Rural account</option>
+                <option value="nps">National Pension System</option>
+              </select>
+            </div>
+
+            <div class="form-group hidden" id="initialDepositGroup">
+              <label for="initialDeposit">Initial Deposit (₹)</label>
+              <input
+                type="text"
+                id="initialDeposit"
+                placeholder="Enter initial deposit amount"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="captchaInput">
+                Security Check
+                <span id="captchaQuestion" class="muted"></span>
+              </label>
+              <input
+                type="number"
+                id="captchaInput"
+                placeholder="Enter the result"
+                required
+              />
+            </div>
+
+            <div class="form-full">
+              <div id="registerError" class="alert alert-error hidden"></div>
+              <div id="registerSuccess" class="alert alert-success hidden"></div>
+            </div>
+
+            <div class="form-full register-legal-block">
+              <p class="register-legal-intro muted">
+                Please read the following before you continue. The links open in a new tab.
+              </p>
+              <ul class="register-legal-links">
+                <li>
+                  <a href="privacy-statement.html" target="_blank" rel="noopener noreferrer"
+                    >Privacy statement</a
+                  >
+                  — describes how we collect, use, and protect your personal information.
+                </li>
+                <li>
+                  <a href="disclosure.html" target="_blank" rel="noopener noreferrer">Disclosure</a>
+                  — key facts and regulatory disclosures about our banking services.
+                </li>
+                <li>
+                  <a href="terms-conditions.html" target="_blank" rel="noopener noreferrer"
+                    >Terms &amp; conditions</a
+                  >
+                  — the agreement for using JPND Bank online and mobile services.
+                </li>
+              </ul>
+              <label class="register-legal-checkbox" for="registerLegalConsent">
+                <input
+                  type="checkbox"
+                  id="registerLegalConsent"
+                  name="legalConsent"
+                  required
+                  autocomplete="off"
+                />
+                <span>
+                  I confirm that I have read and agree to the
+                  <a href="privacy-statement.html" target="_blank" rel="noopener noreferrer"
+                    >Privacy statement</a
+                  >,
+                  <a href="disclosure.html" target="_blank" rel="noopener noreferrer">Disclosure</a
+                  >, and
+                  <a href="terms-conditions.html" target="_blank" rel="noopener noreferrer"
+                    >Terms &amp; conditions</a
+                  >.
+                </span>
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" id="registerSubmitBtn">
+                Register
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost"
+                id="registerResetBtn"
+              >
+                Reset
+              </button>
+            </div>
+          </form>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <div class="footer-grid">
+          <div>
+            <p class="muted">Contact</p>
+            <p class="footer-line">Email: sample@gmail.com</p>
+            <p class="footer-line">Email: sample1@gmail.com</p>
+            <p class="footer-line">Phone: 9123456789 / 8123456789</p>
+          </div>
+          <div>
+            <p class="muted">Address</p>
+            <p class="footer-line">
+              No:007 randy garden rocky Street,
+            </p>
+            <p class="footer-line">
+              royalnagar Chennai-123456.
+            </p>
+          </div>
+          <div>
+            <p class="muted">Connect</p>
+            <p class="footer-line">
+              <a href="#" target="_blank">Facebook</a> ·
+              <a href="#" target="_blank">Instagram</a> ·
+              <a href="#" target="_blank">WhatsApp</a>
+            </p>
+            <p class="footer-line">
+              <a href="#" target="_blank">View location on map</a>
+            </p>
+          </div>
+        </div>
+        <p class="footer-copy">
+          © <span id="year"></span> JPND Bank. All rights reserved.
+        </p>
+      </footer>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/storage.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+      
+      // Pre-select account type from URL parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const accountType = urlParams.get('accountType');
+      if (accountType) {
+        const accountTypeSelect = document.getElementById('accountType');
+        if (accountTypeSelect) {
+          accountTypeSelect.value = accountType;
+        }
+      }
+    </script>
+  </body>
+  </html>
+
+
+
+

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JPND Bank | Disclosure</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="theme-light">
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="logo">
+          <span class="logo-mark">JD</span>
+          <span class="logo-text">JPND Bank</span>
+        </div>
+        <nav class="header-nav">
+          <a href="register.html" class="link-light">Back to registration</a>
+        </nav>
+      </header>
+
+      <main class="auth-main">
+        <section class="auth-card wide legal-doc">
+          <h1 class="auth-title">Disclosure</h1>
+          <p class="muted">Important information about our services</p>
+          <div class="legal-doc-body">
+            <p>
+              JPND Bank provides banking and related services subject to applicable laws and
+              internal policies. This disclosure highlights general points you should know before
+              opening or using an account.
+            </p>
+            <p>
+              <strong>Interest and fees.</strong> Rates, fees, and charges may apply to products
+              you choose. Details are provided in product schedules and notices at the time of
+              account opening or when terms change.
+            </p>
+            <p>
+              <strong>Regulatory framework.</strong> Our operations are subject to banking and
+              data-protection rules. Where required, we will provide you with further disclosures
+              specific to your product or jurisdiction.
+            </p>
+            <p>
+              <strong>No investment advice.</strong> Information on this site is for general
+              guidance and does not constitute financial, legal, or tax advice. Seek independent
+              advice for your situation.
+            </p>
+          </div>
+          <p class="mt-md">
+            <a href="register.html" class="link-inline">← Return to registration</a>
+          </p>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <p class="footer-copy">© <span id="year"></span> JPND Bank. All rights reserved.</p>
+      </footer>
+    </div>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
