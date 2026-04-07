@@ -20,6 +20,28 @@ body.theme-light {
   min-height: 100vh;
 }
 
+/* Educational-demo notice (transparency for users & platform reviewers) */
+.demo-site-banner {
+  background: linear-gradient(90deg, #7c2d12 0%, #9a3412 50%, #7c2d12 100%);
+  color: #fff8f0;
+  padding: 0.55rem 1rem;
+  border-bottom: 3px solid #ea580c;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.demo-site-banner__inner {
+  margin: 0 auto;
+  max-width: 72rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.demo-site-banner strong {
+  font-weight: 700;
+  color: #ffffff;
+}
+
 a {
   color: #002366;
   text-decoration: none;
@@ -1363,24 +1385,4 @@ input::placeholder {
   gap: 0.5rem;
   margin-top: 0.6rem;
 }
-
-/* KYC liveness (webcam + blink) */
-.kyc-live-block {
-  padding: 1rem 1.25rem;
-  border-radius: 12px;
-  border: 1px solid rgba(0, 35, 102, 0.12);
-  background: rgba(255, 255, 255, 0.7);
-}
-
-.kyc-video {
-  display: block;
-  width: 100%;
-  max-width: 480px;
-  max-height: 360px;
-  border-radius: 10px;
-  background: #0a0a12;
-  object-fit: cover;
-}
-
-
 

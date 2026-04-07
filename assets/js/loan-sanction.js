@@ -39,6 +39,13 @@
     collateralGroupEl.classList.toggle("hidden", !securedLoanEl.checked);
   }
 
+  function isPdfFile(file) {
+    if (!file) return false;
+    const name = String(file.name || "").toLowerCase();
+    const type = String(file.type || "").toLowerCase();
+    return type === "application/pdf" || name.endsWith(".pdf");
+  }
+
   function initLoanDocumentAi() {
     if (!loanDocExtractBtn || !loanDocFileEl) return;
     loanDocExtractBtn.addEventListener("click", async () => {
@@ -52,6 +59,14 @@
       }
       if (files.length > 5) {
         if (loanDocAiMsg) loanDocAiMsg.textContent = "Please upload up to 5 documents.";
+        return;
+      }
+      const nonPdf = files.find((f) => !isPdfFile(f));
+      if (nonPdf) {
+        if (loanDocAiMsg) {
+          loanDocAiMsg.textContent =
+            "Only PDF files are accepted. Use your app’s “Download PDF” or Print → Save as PDF (see tips under the file field).";
+        }
         return;
       }
       const statedIncome = loanDocStatedIncomeEl ? parseMoney(loanDocStatedIncomeEl.value) : 0;

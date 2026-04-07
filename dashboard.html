@@ -3,10 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JPND Bank | Dashboard</title>
+    <meta
+      name="description"
+      content="Educational demo dashboard only. No real banking. Fictional JPND Bank project."
+    />
+    <title>Educational demo — JPND Bank | Dashboard</title>
     <link rel="stylesheet" href="assets/css/styles.css" />
   </head>
   <body class="theme-light">
+    <script src="assets/js/demo-banner.js"></script>
     <div class="app-shell">
       <header class="app-header app-header-auth">
         <div class="logo">
@@ -20,13 +25,6 @@
       </header>
 
       <main class="dashboard-main">
-        <section id="kycBanner" class="card hidden" style="border-left: 4px solid #ca8a04;">
-          <h2 class="card-title" style="margin-top: 0;">Verify your identity (KYC)</h2>
-          <p class="muted" style="margin: 0;">
-            Complete selfie + ID verification to reduce fraud and strengthen your account.
-          </p>
-          <a href="kyc.html" class="btn btn-primary btn-sm mt-sm">Complete KYC</a>
-        </section>
         <section class="grid grid-3">
           <article class="card highlight">
             <h2 class="card-title">Account Overview</h2>
@@ -469,27 +467,21 @@
 
         <section class="card mt-lg">
           <div class="card-header">
-            <h2 class="card-title">AI Voice Banking</h2>
+            <h2 class="card-title">AI Command Banking</h2>
           </div>
           <p class="muted">
-            Use voice to check balance, transfer money, or block card. Sensitive actions require a
-            password confirmation (step-up).
+            Type a command to check balance, transfer money, or block your card. Sensitive actions
+            require password confirmation (step-up). No microphone or camera is used.
           </p>
           <div id="voiceCardStatus" class="muted mt-sm">Card status: loading...</div>
           <div class="button-stack horizontal mt-sm">
-            <button type="button" id="voiceStartBtn" class="btn btn-primary btn-sm">
-              Start Voice
-            </button>
-            <button type="button" id="voiceStopBtn" class="btn btn-ghost btn-sm" disabled>
-              Stop
-            </button>
             <button type="button" id="voiceUnblockShortcutBtn" class="btn btn-ghost btn-sm">
-              Unblock Card (Voice)
+              Unblock Card (preset text)
             </button>
           </div>
           <div class="form-group mt-sm">
-            <label for="voiceTranscript">Transcript</label>
-            <input type="text" id="voiceTranscript" placeholder="Speak or type here..." />
+            <label for="voiceTranscript">Command</label>
+            <input type="text" id="voiceTranscript" placeholder="Example: what is my balance" />
           </div>
           <div class="button-stack horizontal">
             <button type="button" id="voiceAnalyzeBtn" class="btn btn-ghost btn-sm">
@@ -499,7 +491,7 @@
               Execute
             </button>
           </div>
-          <div id="voiceResult" class="muted mt-sm">Waiting for voice input...</div>
+          <div id="voiceResult" class="muted mt-sm">Type a command, then click Analyze.</div>
           <div id="voiceStepUpBox" class="mt-sm hidden">
             <div class="form-group">
               <label for="voiceStepUpPassword">Confirm Password (step-up)</label>

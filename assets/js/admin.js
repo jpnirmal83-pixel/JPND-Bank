@@ -89,9 +89,6 @@
   const voiceStatusFilter = document.getElementById("adminVoiceStatusFilter");
   const voiceRefreshBtn = document.getElementById("adminVoiceRefreshBtn");
   const voiceAuditBody = document.getElementById("adminVoiceAuditBody");
-  const adminKycBody = document.getElementById("adminKycBody");
-  const adminKycStatusFilter = document.getElementById("adminKycStatusFilter");
-  const adminKycRefreshBtn = document.getElementById("adminKycRefreshBtn");
   const adminLoanDocAiBody = document.getElementById("adminLoanDocAiBody");
   const adminLoanDocReviewStatusFilter = document.getElementById("adminLoanDocReviewStatusFilter");
   const adminLoanDocAccountFilter = document.getElementById("adminLoanDocAccountFilter");
@@ -134,7 +131,6 @@
     initChurnControls();
     initKbControls();
     initVoiceAuditControls();
-    initKycAdminControls();
     initLoanDocumentAiAdminControls();
     initSupportAuditControls();
   }
@@ -1982,65 +1978,6 @@
     }
 
     await refreshVoiceAudit();
-  }
-
-  async function initKycAdminControls() {
-    if (!adminKycBody) return;
-
-    async function loadKyc() {
-      const st = adminKycStatusFilter ? adminKycStatusFilter.value : "";
-      try {
-        const rows = await adminKycSubmissions(80, st);
-        if (!rows || !rows.length) {
-          adminKycBody.innerHTML =
-            '<tr><td colspan="9" class="muted text-center">No KYC submissions yet.</td></tr>';
-          return;
-        }
-        adminKycBody.innerHTML = rows
-          .map(
-            (r) => `
-          <tr data-kyc-id="${r.id}">
-            <td>${r.id}</td>
-            <td>${escapeHtml(r.accountNumber)}</td>
-            <td>${escapeHtml(r.name || "")}</td>
-            <td>${escapeHtml(r.status)}</td>
-            <td>${Number(r.livenessScore || 0).toFixed(2)}</td>
-            <td>${r.faceDistance != null ? Number(r.faceDistance).toFixed(4) : "-"}</td>
-            <td>${Number(r.nameMatchScore || 0).toFixed(2)}</td>
-            <td>${formatDateTime(r.createdAt)}</td>
-            <td>
-              ${
-                r.status === "manual_review" || r.status === "rejected"
-                  ? `<button type="button" class="btn btn-ghost btn-sm" data-kyc-approve="${r.id}">Approve</button>`
-                  : "-"
-              }
-            </td>
-          </tr>
-        `
-          )
-          .join("");
-
-        adminKycBody.querySelectorAll("button[data-kyc-approve]").forEach((btn) => {
-          btn.addEventListener("click", async () => {
-            const id = Number(btn.getAttribute("data-kyc-approve"));
-            if (!id || !confirm("Approve this KYC submission?")) return;
-            try {
-              await adminKycApprove(id);
-              await loadKyc();
-            } catch (err) {
-              alert(err.message || "Approve failed.");
-            }
-          });
-        });
-      } catch {
-        adminKycBody.innerHTML =
-          '<tr><td colspan="9" class="muted text-center">Failed to load KYC submissions.</td></tr>';
-      }
-    }
-
-    if (adminKycRefreshBtn) adminKycRefreshBtn.addEventListener("click", loadKyc);
-    if (adminKycStatusFilter) adminKycStatusFilter.addEventListener("change", loadKyc);
-    await loadKyc();
   }
 
   async function initLoanDocumentAiAdminControls() {

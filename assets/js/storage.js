@@ -57,9 +57,28 @@ async function apiRequest(path, options = {}) {
     throw new Error(apiUnreachableMessage());
   }
   const text = await response.text();
-  const data = text ? JSON.parse(text) : {};
+  let data = {};
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      throw new Error(
+        "The server did not return JSON (often a 404 page or wrong API URL). " +
+          "For a live site, set JPND_DEPLOY_API_BASE in assets/js/config.js to your FastAPI URL, " +
+          "or add an /api proxy. Current API base: " +
+          BANK_API_BASE_URL
+      );
+    }
+  }
   if (!response.ok) {
-    throw new Error(data.detail || "Request failed.");
+    const detail = data.detail;
+    const msg =
+      typeof detail === "string"
+        ? detail
+        : Array.isArray(detail)
+          ? detail.map((d) => (typeof d === "string" ? d : (d.msg || d.type || ""))).join(" ")
+          : "Request failed.";
+    throw new Error(msg || "Request failed.");
   }
   return data;
 }
@@ -334,50 +353,6 @@ async function voiceExecute(challengeId) {
 
 async function voiceCardStatusMe() {
   return apiRequest("/voice/card-status/me");
-}
-
-async function getKycStatus() {
-  return apiRequest("/kyc/status/me");
-}
-
-async function uploadKyc(selfieFile, idFile, livenessProof) {
-  const session = getSession();
-  if (!session || !session.accountNumber) {
-    throw new Error("Please log in to complete KYC.");
-  }
-  const fd = new FormData();
-  fd.append("selfie", selfieFile);
-  fd.append("id_document", idFile);
-  if (livenessProof && typeof livenessProof === "object") {
-    fd.append("liveness_proof", JSON.stringify(livenessProof));
-  }
-  let response;
-  try {
-    response = await fetch(`${BANK_API_BASE_URL}/kyc/upload`, {
-      method: "POST",
-      headers: session?.accessToken ? { Authorization: `Bearer ${session.accessToken}` } : {},
-      credentials: "include",
-      body: fd,
-    });
-  } catch {
-    throw new Error(apiUnreachableMessage());
-  }
-  const text = await response.text();
-  const data = text ? JSON.parse(text) : {};
-  if (!response.ok) {
-    throw new Error(data.detail || "KYC upload failed.");
-  }
-  return data;
-}
-
-async function adminKycSubmissions(limit = 50, status = "") {
-  const params = new URLSearchParams({ limit: String(limit) });
-  if (status) params.set("status", String(status));
-  return apiRequest(`/admin/kyc/submissions?${params.toString()}`);
-}
-
-async function adminKycApprove(submissionId) {
-  return apiRequest(`/admin/kyc/${encodeURIComponent(submissionId)}/approve`, { method: "POST" });
 }
 
 async function adminVoiceAudit(limit = 50, accountNumber = "", intent = "", status = "") {

@@ -3,10 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JPND Bank | Loan Sanction Prediction</title>
+    <meta
+      name="description"
+      content="Educational ML loan demo only. Not real underwriting—fictional JPND Bank."
+    />
+    <title>Educational demo — JPND Bank | Loan sanction</title>
     <link rel="stylesheet" href="assets/css/styles.css" />
   </head>
   <body class="theme-light">
+    <script src="assets/js/demo-banner.js"></script>
     <div class="app-shell">
       <header class="app-header app-header-auth">
         <div class="logo">
@@ -45,12 +50,19 @@
               <h2 class="card-title">Document AI (OCR + Classification)</h2>
             </div>
             <p class="muted">
-              Upload salary slip or bank statement. AI extracts key values and can auto-fill income/EMI.
+              Upload a salary slip or bank statement as a <strong>PDF</strong>. The analyzer extracts
+              text to suggest income and EMI and can auto-fill the form below.
             </p>
             <div class="form two-column">
               <div class="form-group">
-                <label for="loanDocFile">Loan Document (image/PDF)</label>
-                <input type="file" id="loanDocFile" accept=".jpg,.jpeg,.png,.webp,.pdf" multiple />
+                <label for="loanDocFile">Loan document (PDF only)</label>
+                <input type="file" id="loanDocFile" accept=".pdf,application/pdf" multiple />
+                <p class="muted mt-sm" style="font-size: 0.9rem; line-height: 1.45">
+                  <strong>How to get a PDF:</strong> use your bank or employer app’s “Share” or “Download
+                  PDF” on the statement or payslip; or open the document in the browser and choose
+                  <em>Print → Save as PDF</em>. Up to 5 files, 8&nbsp;MB each. Photos and camera uploads
+                  are not accepted—export or scan to PDF first.
+                </p>
               </div>
               <div class="form-group">
                 <label for="loanDocStatedIncome">Stated Monthly Income for verification (optional)</label>

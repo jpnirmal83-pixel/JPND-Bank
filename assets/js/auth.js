@@ -43,6 +43,9 @@
       if (subtitleEl) subtitleEl.textContent = "Sign in to manage customer accounts.";
       const recoveryLinks = document.getElementById("loginRecoveryLinks");
       if (recoveryLinks) recoveryLinks.classList.add("hidden");
+      if (identifierInput) {
+        identifierInput.placeholder = "admin@localhost or your admin email";
+      }
     }
 
     // Always clear fields on load so previous data is not kept
@@ -435,7 +438,7 @@
 
         showSuccess(
           successBox,
-          "Registration Done successfully. Please log in to view your account number, then complete KYC (identity verification) from the dashboard for stronger account protection."
+          "Registration completed successfully. Please log in to view your account number."
         );
 
         registerForm.reset();

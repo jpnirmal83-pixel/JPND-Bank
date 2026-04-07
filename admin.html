@@ -3,10 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JPND Bank | Admin Panel</title>
+    <meta
+      name="description"
+      content="Educational demo admin panel only. Fictional JPND Bank—not real customer data or services."
+    />
+    <title>Educational demo — JPND Bank | Admin</title>
     <link rel="stylesheet" href="assets/css/styles.css" />
   </head>
   <body class="theme-light">
+    <script src="assets/js/demo-banner.js"></script>
     <div class="app-shell">
       <header class="app-header app-header-auth">
         <div class="logo">
@@ -847,45 +852,6 @@
           </thead>
           <tbody id="adminKbBody">
             <tr><td colspan="6" class="muted text-center">No KB documents yet.</td></tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section class="card mt-lg">
-        <div class="card-header">
-          <h2 class="card-title">KYC (Face + ID) Submissions</h2>
-        </div>
-        <p class="muted">
-          Review OCR + face-match results. Approve manual-review or rejected cases after offline checks.
-        </p>
-        <div class="button-stack horizontal mt-sm">
-          <div class="form-group" style="margin: 0;">
-            <label for="adminKycStatusFilter">Status</label>
-            <select id="adminKycStatusFilter">
-              <option value="">All</option>
-              <option value="approved">approved</option>
-              <option value="manual_review">manual_review</option>
-              <option value="rejected">rejected</option>
-            </select>
-          </div>
-          <button type="button" id="adminKycRefreshBtn" class="btn btn-ghost btn-sm">Refresh</button>
-        </div>
-        <table class="table mt-md">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Account</th>
-              <th>Name</th>
-              <th>Status</th>
-              <th>Liveness</th>
-              <th>Face Δ</th>
-              <th>Name match</th>
-              <th>Time</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="adminKycBody">
-            <tr><td colspan="9" class="muted text-center">No submissions yet.</td></tr>
           </tbody>
         </table>
       </section>

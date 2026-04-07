@@ -49,43 +49,7 @@ class UserOut(BaseModel):
     balance: float
     isAdmin: bool
     cardBlocked: bool
-    kycVerified: bool = False
-    kycVerifiedAt: datetime | None = None
     transactions: list[Transaction]
-    createdAt: datetime
-
-
-class KycSubmitOut(BaseModel):
-    status: Literal["approved", "rejected", "manual_review"]
-    message: str
-    livenessScore: float
-    faceDistance: float | None = None
-    nameMatchScore: float
-    ocrPreview: str
-    reasons: list[str]
-    clientLivenessOk: bool = True
-    antiSpoofReal: bool | None = None
-    antiSpoofScore: float | None = None
-    sharpnessScore: float | None = None
-
-
-class KycStatusOut(BaseModel):
-    kycVerified: bool
-    kycVerifiedAt: datetime | None = None
-    lastStatus: str | None = None
-    lastSubmittedAt: datetime | None = None
-
-
-class AdminKycSubmissionOut(BaseModel):
-    id: int
-    accountNumber: str
-    name: str
-    status: str
-    livenessScore: float
-    faceDistance: float | None
-    nameMatchScore: float
-    ocrPreview: str
-    reasons: list[str]
     createdAt: datetime
 
 

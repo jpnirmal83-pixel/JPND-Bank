@@ -21,8 +21,6 @@ class User(Base):
     password = Column(String(255), nullable=False)
     is_admin = Column(Boolean, nullable=False, default=False)
     card_blocked = Column(Boolean, nullable=False, default=False)
-    kyc_verified = Column(Boolean, nullable=False, default=False)
-    kyc_verified_at = Column(DateTime(timezone=True), nullable=True)
     transactions_json = Column(Text, nullable=False, default="[]")
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
@@ -87,22 +85,6 @@ class SupportChatLog(Base):
     blocked_for_privacy = Column(Boolean, nullable=False, default=False)
     source_count = Column(Integer, nullable=False, default=0)
     source_titles_json = Column(Text, nullable=False, default="[]")
-    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-
-
-class KycSubmission(Base):
-    __tablename__ = "kyc_submissions"
-
-    id = Column(Integer, primary_key=True, index=True)
-    account_number = Column(String(32), ForeignKey("users.account_number"), nullable=False, index=True)
-    status = Column(String(30), nullable=False, default="pending")  # pending|approved|rejected|manual_review
-    selfie_path = Column(String(512), nullable=False, default="")
-    id_path = Column(String(512), nullable=False, default="")
-    liveness_score = Column(Float, nullable=False, default=0)
-    face_distance = Column(Float, nullable=True)
-    name_match_score = Column(Float, nullable=False, default=0)
-    ocr_preview = Column(Text, nullable=False, default="")
-    reasons_json = Column(Text, nullable=False, default="[]")
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
 

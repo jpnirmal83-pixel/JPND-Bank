@@ -1,0 +1,11 @@
+# Static site root (change if Netlify “publish directory” is a subfolder of the repo).
+[build]
+  publish = "."
+
+# Proxy all frontend /api/* calls to a Netlify Function.
+# Set Netlify env var JPND_API_ORIGIN to your backend origin (e.g. https://api.yourdomain.com)
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api-proxy/:splat"
+  status = 200
+  force = true

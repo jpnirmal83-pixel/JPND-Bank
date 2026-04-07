@@ -1,9 +1,5 @@
 import os
 
-# Before TensorFlow / DeepFace load: reduce C++ INFO/WARN noise (oneDNN, absl, CPU flags).
-os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
-os.environ.setdefault("TF_ENABLE_ONEDNN_OPTS", "0")
-
 import json
 import math
 import re
@@ -14,14 +10,9 @@ import zlib
 import csv
 import io
 import logging
-import warnings
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from uuid import uuid4
-
-# Quiet tf_keras / TensorFlow Python warnings (e.g. sparse_softmax_cross_entropy deprecation).
-warnings.filterwarnings("ignore", message=".*sparse_softmax_cross_entropy.*")
-for _name in ("tensorflow", "tf_keras", "h5py", "keras"):
-    logging.getLogger(_name).setLevel(logging.ERROR)
 
 import jwt
 from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, Request, Response, UploadFile
@@ -32,7 +23,6 @@ from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 
 from database import Base, engine, get_db
-from kyc_pipeline import ensure_upload_dir, run_kyc_checks
 from models import (
     CreditRiskSnapshot,
     CreditRiskModel,
@@ -46,7 +36,6 @@ from models import (
     AmlGraphModel,
     AmlCase,
     KnowledgeBaseDocument,
-    KycSubmission,
     LoanDocumentAiLog,
     LoanDocumentAiModel,
     VoiceAuditLog,
@@ -155,9 +144,6 @@ from schemas import (
     VoiceExecuteOut,
     VoiceCardStatusOut,
     AdminVoiceAuditItem,
-    KycSubmitOut,
-    KycStatusOut,
-    AdminKycSubmissionOut,
 )
 
 try:
@@ -350,7 +336,7 @@ def _voice_intent_model_predict(text: str) -> tuple[str, float]:
     return intent, float(conf)
 
 
-def _loan_doc_extract_text_easyocr(file_path: str) -> str:
+def _loan_doc_extract_text_easyocr_image(file_path: str) -> str:
     try:
         import easyocr
     except Exception:
@@ -361,6 +347,38 @@ def _loan_doc_extract_text_easyocr(file_path: str) -> str:
         return " ".join(str(p) for p in (parts or []) if p).strip()
     except Exception:
         return ""
+
+
+def _loan_doc_extract_text_pdf(file_path: str, temp_dir: Path) -> str:
+    try:
+        import fitz  # PyMuPDF
+    except Exception:
+        return ""
+    doc = None
+    try:
+        doc = fitz.open(file_path)
+        parts = [doc[i].get_text() or "" for i in range(len(doc))]
+        plain = "\n".join(parts).strip()
+        ocr_addon = ""
+        if len(plain) < 40 and len(doc) > 0:
+            page = doc[0]
+            pix = page.get_pixmap(matrix=fitz.Matrix(2, 2), alpha=False)
+            png_path = temp_dir / f"_loan_ocr_{uuid4().hex}.png"
+            png_path.write_bytes(pix.tobytes("png"))
+            ocr_addon = _loan_doc_extract_text_easyocr_image(str(png_path))
+            try:
+                png_path.unlink(missing_ok=True)
+            except Exception:
+                pass
+        return (plain + "\n" + ocr_addon).strip()
+    except Exception:
+        return ""
+    finally:
+        if doc is not None:
+            try:
+                doc.close()
+            except Exception:
+                pass
 
 
 def _load_latest_loan_doc_ai_model(db: Session) -> LoanDocumentAiModel | None:
@@ -555,6 +573,12 @@ def _loan_doc_apply_calibration(
     return monthly_income, existing_emi, reasons
 
 
+def _ensure_loan_doc_upload_dir(account_number: str) -> Path:
+    d = Path(__file__).resolve().parent / "uploads" / "loan_documents" / str(account_number).strip()
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+
 def _loan_doc_save_and_extract(
     *,
     file: UploadFile,
@@ -562,24 +586,27 @@ def _loan_doc_save_and_extract(
     stated_monthly_income: float | None,
     db: Session,
 ) -> tuple[LoanDocumentAiLog, dict]:
-    allowed = {"image/jpeg", "image/png", "image/webp", "application/pdf"}
+    allowed_ct = {"application/pdf"}
     ct = (file.content_type or "").split(";")[0].strip().lower()
-    if ct not in allowed:
-        raise HTTPException(status_code=400, detail="Unsupported file type. Use image (jpg/png/webp) or PDF.")
+    fname_lower = (file.filename or "").lower()
+    is_pdf_name = fname_lower.endswith(".pdf")
+    if ct not in allowed_ct and not (ct == "application/octet-stream" and is_pdf_name):
+        raise HTTPException(status_code=400, detail="Only PDF loan documents are accepted.")
 
     data = file.file.read()
     if not data:
         raise HTTPException(status_code=400, detail="Uploaded file is empty.")
     if len(data) > 8 * 1024 * 1024:
         raise HTTPException(status_code=400, detail="File size must be 8MB or less.")
+    if not data.startswith(b"%PDF"):
+        raise HTTPException(status_code=400, detail="File is not a valid PDF.")
 
-    temp_dir = ensure_upload_dir(account_number)
-    ext = ".pdf" if ct == "application/pdf" else (".png" if "png" in ct else (".webp" if "webp" in ct else ".jpg"))
-    fname = f"loan_doc_{uuid4().hex}{ext}"
+    temp_dir = _ensure_loan_doc_upload_dir(account_number)
+    fname = f"loan_doc_{uuid4().hex}.pdf"
     file_path = temp_dir / fname
     file_path.write_bytes(data)
 
-    text_value = _loan_doc_extract_text_easyocr(str(file_path))
+    text_value = _loan_doc_extract_text_pdf(str(file_path), temp_dir)
     if not text_value:
         raise HTTPException(
             status_code=422,
@@ -1923,8 +1950,6 @@ def _to_user_out(u: User) -> UserOut:
         balance=float(u.balance or 0),
         isAdmin=bool(u.is_admin),
         cardBlocked=bool(getattr(u, "card_blocked", False)),
-        kycVerified=bool(getattr(u, "kyc_verified", False)),
-        kycVerifiedAt=getattr(u, "kyc_verified_at", None),
         transactions=_to_transactions(u.transactions_json),
         createdAt=u.created_at,
     )
@@ -2660,10 +2685,6 @@ def _ensure_default_admin(db: Session):
         db.execute(text("ALTER TABLE users ADD COLUMN open_account_type VARCHAR(40) NOT NULL DEFAULT ''"))
     if "card_blocked" not in existing_columns:
         db.execute(text("ALTER TABLE users ADD COLUMN card_blocked BOOLEAN NOT NULL DEFAULT 0"))
-    if "kyc_verified" not in existing_columns:
-        db.execute(text("ALTER TABLE users ADD COLUMN kyc_verified BOOLEAN NOT NULL DEFAULT 0"))
-    if "kyc_verified_at" not in existing_columns:
-        db.execute(text("ALTER TABLE users ADD COLUMN kyc_verified_at DATETIME NULL"))
     db.commit()
 
     # One-time migration for loan sanction training label column.
@@ -2892,17 +2913,19 @@ def _ensure_default_admin(db: Session):
         # Never overwrite existing admin credentials at startup.
         if not admin.name:
             admin.name = "Administrator"
-    else:
-        bootstrap_email = os.getenv("ADMIN_BOOTSTRAP_EMAIL", "admin@localhost").strip()
-        bootstrap_password = os.getenv("ADMIN_BOOTSTRAP_PASSWORD", "").strip()
-        if APP_ENV in {"production", "prod"} and (not bootstrap_password or len(bootstrap_password) < 12):
-            raise RuntimeError(
-                "ADMIN_BOOTSTRAP_PASSWORD must be set (>=12 chars) for first admin creation in production."
-            )
-        if not bootstrap_password:
-            # Development fallback only.
-            bootstrap_password = "ChangeMeNow@123"
-        admin = User(
+        db.commit()
+        return
+
+    bootstrap_email = os.getenv("ADMIN_BOOTSTRAP_EMAIL", "admin@localhost").strip()
+    bootstrap_password = os.getenv("ADMIN_BOOTSTRAP_PASSWORD", "").strip()
+    if APP_ENV in {"production", "prod"} and (not bootstrap_password or len(bootstrap_password) < 12):
+        raise RuntimeError("ADMIN_BOOTSTRAP_PASSWORD must be set (>=12 chars) for first admin creation in production.")
+    if not bootstrap_password:
+        # Development fallback only.
+        bootstrap_password = "ChangeMeNow@123"
+
+    db.add(
+        User(
             name="Administrator",
             email=bootstrap_email,
             phone="0000000000",
@@ -2915,7 +2938,7 @@ def _ensure_default_admin(db: Session):
             is_admin=True,
             transactions_json="[]",
         )
-        db.add(admin)
+    )
     db.commit()
 
 
@@ -3098,114 +3121,6 @@ def public_forgot_password(payload: PublicForgotPasswordIn, db: Session = Depend
 @app.get("/api/users/me", response_model=UserOut)
 def get_me(current: User = Depends(_auth_user)):
     return _to_user_out(current)
-
-
-@app.get("/api/kyc/status/me", response_model=KycStatusOut)
-def kyc_status_me(current: User = Depends(_auth_user), db: Session = Depends(get_db)):
-    user = db.execute(select(User).where(User.account_number == current.account_number)).scalar_one()
-    last = (
-        db.execute(
-            select(KycSubmission)
-            .where(KycSubmission.account_number == current.account_number)
-            .order_by(KycSubmission.created_at.desc())
-            .limit(1)
-        )
-        .scalars()
-        .first()
-    )
-    return KycStatusOut(
-        kycVerified=bool(getattr(user, "kyc_verified", False)),
-        kycVerifiedAt=getattr(user, "kyc_verified_at", None),
-        lastStatus=(last.status if last else None),
-        lastSubmittedAt=(last.created_at if last else None),
-    )
-
-
-@app.post("/api/kyc/upload", response_model=KycSubmitOut)
-async def kyc_upload(
-    selfie: UploadFile = File(...),
-    id_document: UploadFile = File(...),
-    liveness_proof: str | None = Form(None),
-    current: User = Depends(_auth_user),
-    db: Session = Depends(get_db),
-):
-    if current.is_admin:
-        raise HTTPException(status_code=400, detail="KYC is for customer accounts only.")
-    max_bytes = 5 * 1024 * 1024
-    allowed = {"image/jpeg", "image/png", "image/webp"}
-    selfie_bytes = await selfie.read()
-    id_bytes = await id_document.read()
-    if len(selfie_bytes) > max_bytes or len(id_bytes) > max_bytes:
-        raise HTTPException(status_code=400, detail="Each image must be 5MB or smaller.")
-    ct_selfie = (selfie.content_type or "").split(";")[0].strip().lower()
-    ct_id = (id_document.content_type or "").split(";")[0].strip().lower()
-    if ct_selfie not in allowed or ct_id not in allowed:
-        raise HTTPException(status_code=400, detail="Use JPEG, PNG, or WebP images only.")
-
-    uid = uuid4().hex
-    ext_s = ".jpg" if "jpeg" in ct_selfie or ct_selfie == "image/jpg" else (".png" if "png" in ct_selfie else ".webp")
-    ext_i = ".jpg" if "jpeg" in ct_id or ct_id == "image/jpg" else (".png" if "png" in ct_id else ".webp")
-    d = ensure_upload_dir(current.account_number)
-    selfie_path = d / f"selfie_{uid}{ext_s}"
-    id_path = d / f"id_{uid}{ext_i}"
-    selfie_path.write_bytes(selfie_bytes)
-    id_path.write_bytes(id_bytes)
-
-    proof_obj: dict | None = None
-    if liveness_proof and str(liveness_proof).strip():
-        try:
-            proof_obj = json.loads(liveness_proof)
-        except json.JSONDecodeError:
-            raise HTTPException(status_code=400, detail="liveness_proof must be valid JSON.")
-
-    result = run_kyc_checks(str(selfie_path), str(id_path), current.name, client_liveness=proof_obj)
-    if not result.get("ok_ml"):
-        raise HTTPException(
-            status_code=503,
-            detail="; ".join(result.get("reasons") or ["KYC ML stack unavailable. Install backend ML dependencies."]),
-        )
-
-    st = result.get("status") or "rejected"
-    if st not in {"approved", "rejected", "manual_review"}:
-        st = "rejected"
-
-    submission = KycSubmission(
-        account_number=current.account_number,
-        status=st,
-        selfie_path=f"uploads/kyc/{current.account_number}/{selfie_path.name}",
-        id_path=f"uploads/kyc/{current.account_number}/{id_path.name}",
-        liveness_score=float(result.get("liveness_score") or 0),
-        face_distance=result.get("face_distance"),
-        name_match_score=float(result.get("name_match_score") or 0),
-        ocr_preview=str(result.get("ocr_preview") or ""),
-        reasons_json=json.dumps(result.get("reasons") or []),
-    )
-    db.add(submission)
-
-    user = db.execute(select(User).where(User.account_number == current.account_number)).scalar_one()
-    if st == "approved":
-        user.kyc_verified = True
-        user.kyc_verified_at = datetime.now(timezone.utc)
-    elif st in {"rejected", "manual_review"}:
-        user.kyc_verified = False
-
-    db.commit()
-
-    msg = "Your KYC is Completed"
-
-    return KycSubmitOut(
-        status=st,  # type: ignore[arg-type]
-        message=msg,
-        livenessScore=float(result.get("liveness_score") or 0),
-        faceDistance=result.get("face_distance"),
-        nameMatchScore=float(result.get("name_match_score") or 0),
-        ocrPreview=str(result.get("ocr_preview") or ""),
-        reasons=list(result.get("reasons") or []),
-        clientLivenessOk=bool(result.get("client_liveness_ok", True)),
-        antiSpoofReal=result.get("anti_spoof_real"),
-        antiSpoofScore=result.get("antispoof_score"),
-        sharpnessScore=result.get("sharpness_score"),
-    )
 
 
 @app.get("/api/users/by-account/{account_number}", response_model=UserOut)
@@ -7470,7 +7385,6 @@ _SUPPORT_SENSITIVE_KEYWORDS = {
     "card number",
     "ifsc",
     "upi pin",
-    "kyc status",
 }
 
 
@@ -7501,8 +7415,6 @@ def _support_classify_blocked_intent(msg: str) -> str:
         return "credential_disclosure_risk"
     if re.search(r"\b\d{6,}\b", m):
         return "account_identifier_exposure"
-    if any(k in m for k in ["kyc status", "kyc"]):
-        return "kyc_private_status_request"
     return "other_sensitive_request"
 
 
@@ -7555,8 +7467,8 @@ def support_auto_reply(
     if _support_is_sensitive_request(msg):
         safe_reply = (
             "I can help with product, FAQ, and policy guidance, but I cannot access or disclose account-specific data in this chat. "
-            "For account balance, statements, transfers, KYC status, or credential-related requests, use secure logged-in features "
-            "(Dashboard/Transactions/Transfer/KYC pages) or contact official support."
+            "For account balance, statements, transfers, or credential-related requests, use secure logged-in features "
+            "(Dashboard, Transactions, Transfer) or contact official support."
         )
         _support_log(
             db,
@@ -7956,63 +7868,6 @@ def admin_voice_audit(
             )
         )
     return out
-
-
-@app.get("/api/admin/kyc/submissions", response_model=list[AdminKycSubmissionOut])
-def admin_kyc_submissions(
-    limit: int = 50,
-    status: str | None = None,
-    _: User = Depends(_auth_admin),
-    db: Session = Depends(get_db),
-):
-    limit = max(1, min(int(limit or 50), 200))
-    q = select(KycSubmission)
-    if status:
-        q = q.where(KycSubmission.status == str(status).strip().lower())
-    q = q.order_by(KycSubmission.created_at.desc()).limit(limit)
-    rows = db.execute(q).scalars().all()
-    out: list[AdminKycSubmissionOut] = []
-    for r in rows:
-        u = db.execute(select(User).where(User.account_number == r.account_number)).scalar_one_or_none()
-        reasons = []
-        try:
-            reasons = json.loads(r.reasons_json or "[]")
-        except Exception:
-            reasons = []
-        out.append(
-            AdminKycSubmissionOut(
-                id=int(r.id),
-                accountNumber=str(r.account_number or ""),
-                name=(u.name if u else ""),
-                status=str(r.status or ""),
-                livenessScore=float(r.liveness_score or 0),
-                faceDistance=r.face_distance,
-                nameMatchScore=float(r.name_match_score or 0),
-                ocrPreview=str(r.ocr_preview or "")[:500],
-                reasons=reasons if isinstance(reasons, list) else [],
-                createdAt=r.created_at,
-            )
-        )
-    return out
-
-
-@app.post("/api/admin/kyc/{submission_id}/approve")
-def admin_kyc_approve_submission(
-    submission_id: int,
-    _: User = Depends(_auth_admin),
-    db: Session = Depends(get_db),
-):
-    row = db.execute(select(KycSubmission).where(KycSubmission.id == submission_id)).scalar_one_or_none()
-    if not row:
-        raise HTTPException(status_code=404, detail="KYC submission not found.")
-    if row.status not in {"manual_review", "rejected"}:
-        raise HTTPException(status_code=400, detail="Only manual_review or rejected submissions can be approved here.")
-    row.status = "approved"
-    u = db.execute(select(User).where(User.account_number == row.account_number)).scalar_one()
-    u.kyc_verified = True
-    u.kyc_verified_at = datetime.now(timezone.utc)
-    db.commit()
-    return {"ok": True}
 
 
 @app.get("/api/admin/loan/document-ai/logs", response_model=list[AdminLoanDocumentAiItemOut])

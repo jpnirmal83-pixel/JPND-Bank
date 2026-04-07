@@ -1,15 +1,32 @@
 /**
- * JPND Bank — single place to aim the frontend at your API.
+ * JPND Bank — API base URL (must end with /api).
  *
- * Resolution order:
- *   1) window.JAYDEE_API_BASE_URL if already set (e.g. inline script before this file)
- *   2) <meta name="jpnd-api-base" content="https://your-api.example.com/api">
- *   3) JPND_DEPLOY_API_BASE below (change for production builds)
- *
- * Must resolve to the FastAPI prefix including /api (e.g. https://api.example.com/api).
+ * Netlify / Vercel static: leave JPND_DEPLOY_API_BASE "" and either:
+ *   • add a host proxy so same-origin /api/* hits your FastAPI (see netlify.toml), or
+ *   • set a real URL below and allow that origin in backend CORS_ORIGINS.
  */
 (function () {
-  var JPND_DEPLOY_API_BASE = "http://localhost:8000/api";
+  /**
+   * Your public FastAPI base URL, including /api. Example:
+   *   "https://my-app.up.railway.app/api"
+   * Leave "" if the site proxies /api to the backend (recommended on Netlify).
+   */
+  var JPND_DEPLOY_API_BASE = "";
+
+  /** Treat tutorial placeholders as “not set” so we fall back to same-origin /api. */
+  function isPlaceholderDeployBase(s) {
+    var t = (s || "").trim().toLowerCase();
+    if (!t) return true;
+    return (
+      t.indexOf("your-public-fastapi") !== -1 ||
+      t.indexOf("your-fastapi-host") !== -1 ||
+      t.indexOf("put-your-fastapi") !== -1 ||
+      t.indexOf("replace-with-your-fastapi") !== -1 ||
+      t.indexOf("your-actual-backend") !== -1 ||
+      t.indexOf("replace_me") !== -1 ||
+      /^https?:\/\/example\.com\//.test(t)
+    );
+  }
 
   function normalizeApiBase(raw) {
     var u = (raw || "").trim();
@@ -24,9 +41,46 @@
     return;
   }
 
+  try {
+    var qs = new URLSearchParams(window.location.search);
+    var qBase = qs.get("apiBase");
+    if (qBase && qBase.trim()) {
+      window.JAYDEE_API_BASE_URL = normalizeApiBase(qBase);
+      return;
+    }
+  } catch (e) {
+    /* ignore */
+  }
+
   var meta = document.querySelector('meta[name="jpnd-api-base"]');
   var fromMeta = meta && meta.getAttribute("content");
   fromMeta = fromMeta && fromMeta.trim();
+  if (fromMeta) {
+    window.JAYDEE_API_BASE_URL = normalizeApiBase(fromMeta);
+    return;
+  }
 
-  window.JAYDEE_API_BASE_URL = normalizeApiBase(fromMeta || JPND_DEPLOY_API_BASE);
+  if (
+    JPND_DEPLOY_API_BASE &&
+    JPND_DEPLOY_API_BASE.trim() &&
+    !isPlaceholderDeployBase(JPND_DEPLOY_API_BASE)
+  ) {
+    window.JAYDEE_API_BASE_URL = normalizeApiBase(JPND_DEPLOY_API_BASE);
+    return;
+  }
+
+  var proto = window.location.protocol || "";
+  var host = window.location.hostname || "";
+  var isFile = proto === "file:";
+  var isLocal =
+    isFile ||
+    host === "localhost" ||
+    host === "127.0.0.1" ||
+    host === "[::1]";
+
+  var auto = isLocal
+    ? "http://localhost:8000/api"
+    : (window.location.origin || "").replace(/\/$/, "") + "/api";
+
+  window.JAYDEE_API_BASE_URL = normalizeApiBase(auto);
 })();

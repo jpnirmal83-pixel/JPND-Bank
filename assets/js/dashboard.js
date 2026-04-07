@@ -11,7 +11,6 @@
       return;
     }
     initHeader();
-    initKycBanner();
     renderOverview();
     renderRecent();
     initQuickActions();
@@ -54,8 +53,6 @@
   const financePrefsForm = document.getElementById("financePrefsForm");
   const financePrefsMsg = document.getElementById("financePrefsMsg");
   const churnBox = document.getElementById("churnBox");
-  const voiceStartBtn = document.getElementById("voiceStartBtn");
-  const voiceStopBtn = document.getElementById("voiceStopBtn");
   const voiceUnblockShortcutBtn = document.getElementById("voiceUnblockShortcutBtn");
   const voiceTranscript = document.getElementById("voiceTranscript");
   const voiceAnalyzeBtn = document.getElementById("voiceAnalyzeBtn");
@@ -78,13 +75,6 @@
     if (welcomeUserEl) {
       welcomeUserEl.textContent = user.name;
     }
-  }
-
-  function initKycBanner() {
-    const el = document.getElementById("kycBanner");
-    if (!el || !user) return;
-    if (user.kycVerified) return;
-    el.classList.remove("hidden");
   }
 
   function renderOverview() {
@@ -203,12 +193,8 @@
   function initVoiceBanking() {
     if (!voiceTranscript || !voiceResult || !voiceAnalyzeBtn || !voiceExecuteBtn) return;
 
-    let recognition = null;
     let activeChallengeId = null;
     let lastIntent = null;
-
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition || null;
 
     function setStepUpVisible(visible) {
       if (!voiceStepUpBox) return;
@@ -237,61 +223,11 @@
       }
     }
 
-    if (voiceStartBtn && SpeechRecognition) {
-      voiceStartBtn.addEventListener("click", () => {
-        try {
-          recognition = new SpeechRecognition();
-          recognition.lang = "en-IN";
-          recognition.interimResults = false;
-          recognition.maxAlternatives = 1;
-
-          recognition.onstart = () => {
-            voiceResult.textContent = "Listening… speak now.";
-            if (voiceStopBtn) voiceStopBtn.disabled = false;
-            voiceStartBtn.disabled = true;
-          };
-
-          recognition.onerror = (e) => {
-            voiceResult.textContent = `Voice error: ${e.error || "unknown error"}`;
-            if (voiceStopBtn) voiceStopBtn.disabled = true;
-            voiceStartBtn.disabled = false;
-          };
-
-          recognition.onresult = (event) => {
-            const transcript = event.results?.[0]?.[0]?.transcript || "";
-            voiceTranscript.value = transcript;
-            voiceResult.textContent = "Captured transcript. Click Analyze.";
-          };
-
-          recognition.onend = () => {
-            if (voiceStopBtn) voiceStopBtn.disabled = true;
-            voiceStartBtn.disabled = false;
-          };
-
-          recognition.start();
-        } catch (err) {
-          voiceResult.textContent = err.message || "Unable to start voice recognition.";
-        }
-      });
-    } else if (voiceStartBtn) {
-      voiceStartBtn.disabled = true;
-      voiceResult.textContent =
-        "Voice recognition not supported in this browser. Type a command and click Analyze.";
-    }
-
-    if (voiceStopBtn) {
-      voiceStopBtn.addEventListener("click", () => {
-        try {
-          recognition && recognition.stop && recognition.stop();
-        } catch {}
-      });
-    }
-
     voiceAnalyzeBtn.addEventListener("click", async () => {
       resetState();
       const text = (voiceTranscript.value || "").trim();
       if (!text) {
-        voiceResult.textContent = "Please speak or type a command first.";
+        voiceResult.textContent = "Please type a command first.";
         return;
       }
       try {
